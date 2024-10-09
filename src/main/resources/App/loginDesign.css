@@ -1,0 +1,53 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/*
+    Created on : Oct 6, 2024, 10:15:57 PM
+    Author     : HP
+*/
+.gradient{
+    -fx-background-color: linear-gradient(to bottom right, #eb2d2d, #d5e42a);
+}
+.white-form{
+    -fx-background-color: #fff;
+}
+
+.head-label{
+    -fx-border-color: #d5e42a;
+    -fx-border-width: 0 0 0 3px;
+    -fx-padding: 0 0 0 5px;
+}
+
+.login-btn{
+    -fx-background-color: linear-gradient(to bottom right, #92b914, #e33e12);
+    -fx-background-radius: 5px;
+    -fx-text-fill: #fff;
+    -fx-cursor : hand;
+    -fx-font-size: 14px;
+}
+.login-btn:hover{
+    -fx-background-color: linear-gradient(to bottom right, #afe512, #ff3f0f);
+}
+
+.text-field
+{
+    -fx-background-color: transparent;
+    -fx-border-color: linear-gradient(to bottom right, #eb2d2d, #d5e42a);
+    -fx-border-width: 0.5px;
+}
+.text-field:focused{
+    -fx-border-width: 1px;
+}
+
+.create-btn{
+    -fx-background-color: #fff;
+    -fx-cursor: hand;
+    -fx-text-fill: #d5e42a;
+    /*-fx-border-color: #d5e42a;*/
+    -fx-border-width: 2px;
+}
+.create-btn:hover{
+    -fx-background-color: #d5e42a;
+    -fx-text-fill: #fff;
+}
