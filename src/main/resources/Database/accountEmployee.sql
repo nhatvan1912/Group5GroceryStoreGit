@@ -1,1 +1,1 @@
-SELECT * FROM storemanager.employee;
+SELECT * FROM listaccount.employee;
