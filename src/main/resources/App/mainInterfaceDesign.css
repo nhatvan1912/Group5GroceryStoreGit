@@ -1,0 +1,40 @@
+.nav_form{
+    -fx-background-color: linear-gradient(to bottom right, #eb2d2d, #d5e42a);
+}
+.nav_btn{
+    -fx-background-color: transparent;
+    -fx-border-color: #fff;
+    -fx-text-fill: #fff;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+}
+.nav_btn:hover{
+    -fx-background-color: #fff;
+    -fx-text-fill: #000;
+}
+.header{
+    -fx-background-color: linear-gradient(to bottom right, #92b914, #e33e12);
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #fff;
+}
+.logoutbtn{
+    -fx-background-color: #ff7332;
+    -fx-padding: 5px;
+    -fx-cursor: hand;
+    -fx-background-radius: 10px;
+}
+.logoutbtn:hover{
+    -fx-background-color: #ff6016;
+}
+.shadow{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5,0,0,0);
+}
+.white-bg{
+    -fx-background-color: #fff;
+}
+.radius{
+    -fx-background-radius: 8px  ;
+}
+.transparent{
+    -fx-background-color: transparent;
+}
