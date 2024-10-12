@@ -8,9 +8,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
-    private final static String url = "jdbc:mysql://localhost:3306/storemanager";
+    private final static String url = "jdbc:mysql://localhost:3306/listaccount";
+
     private final static String username = "root";
-    private final static String password = "12345678";
+    private final static String password = "";
     public static Connection connectDB(){
         try{
             Connection connect = DriverManager.getConnection(url, username, password);

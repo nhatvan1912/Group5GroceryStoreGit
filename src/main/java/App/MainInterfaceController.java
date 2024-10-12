@@ -125,7 +125,7 @@ public class MainInterfaceController implements Initializable {
             || inventory_stock.getText().isEmpty()
             || inventory_type.getSelectionModel().getSelectedItem() == null
             || inventory_status.getSelectionModel().getSelectedItem() == null
-            || path == ""){
+            || path.isEmpty()){
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
@@ -164,7 +164,7 @@ public class MainInterfaceController implements Initializable {
                     prepare.executeUpdate();
 
                     alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Infomation Message");
+                    alert.setTitle("Information Message");
                     alert.setHeaderText(null);
                     alert.setContentText("Successfully added!");
                     alert.showAndWait();
@@ -183,7 +183,7 @@ public class MainInterfaceController implements Initializable {
                 || inventory_stock.getText().isEmpty()
                 || inventory_type.getSelectionModel().getSelectedItem() == null
                 || inventory_status.getSelectionModel().getSelectedItem() == null
-                || path == "" || id == 0){
+                || path.isEmpty() || id == 0){
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
@@ -250,7 +250,7 @@ public class MainInterfaceController implements Initializable {
                 || inventory_stock.getText().isEmpty()
                 || inventory_type.getSelectionModel().getSelectedItem() == null
                 || inventory_status.getSelectionModel().getSelectedItem() == null
-                || path == "" || id == 0){
+                || path.isEmpty() || id == 0){
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);

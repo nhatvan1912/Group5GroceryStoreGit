@@ -117,7 +117,7 @@ public class LoginController {
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);
-                    alert.setContentText("Sucessfully logged in");
+                    alert.setContentText("Successfully logged in");
                     alert.showAndWait();
 
                     try {
