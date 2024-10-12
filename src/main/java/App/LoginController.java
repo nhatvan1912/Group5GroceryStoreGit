@@ -5,17 +5,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class HelloController {
+public class LoginController {
     @FXML
     private Hyperlink forgotPassword;
 
@@ -108,11 +113,26 @@ public class HelloController {
 
                 result = prepare.executeQuery();
                 if(result.next()){
+                    MainInterfaceController.username = si_username.getText();
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);
                     alert.setContentText("Sucessfully logged in");
                     alert.showAndWait();
+
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("mainInterface.fxml"));
+                        Stage stage = new Stage();
+                        Scene scene = new Scene(root);
+                        stage.setTitle("Group 5 Grocery Store");
+                        stage.setMinWidth(1100);
+                        stage.setMinHeight(600);
+                        stage.setScene(scene);
+                        stage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    si_loginBtn.getScene().getWindow().hide();
                 }else{
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Error Message");
@@ -268,20 +288,10 @@ public class HelloController {
             alert.setContentText("Confirm Passwords do not match");
             alert.showAndWait();
         }else{
-            String getDate = "select date from employee where username = '"
-                    + fp_username.getText() + "'";
             connect = Database.connectDB();
             try{
-                prepare = connect.prepareStatement(getDate);
-                result = prepare.executeQuery();
-                String date = "";
-                if(result.next()){
-                    date = result.getString("date");
-                }
                 String updatePass = "update employee set password = '"
-                        +fp_newPassword.getText() + "', question = '"
-                        +fp_question.getSelectionModel().getSelectedItem() + "', answer = '"
-                        +fp_answer.getText() + "', date = '" + date + "' where username = '"
+                        +fp_newPassword.getText() + "' where username = '"
                         +fp_username.getText() + "'";
 
                 prepare = connect.prepareStatement(updatePass);
@@ -346,8 +356,4 @@ public class HelloController {
         }
     }
 
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//
-//    }
 }
