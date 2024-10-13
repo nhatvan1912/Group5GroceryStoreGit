@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
@@ -31,6 +32,19 @@ public class cardProductController implements Initializable {
 
     @FXML
     private Spinner<?> prod_spinner;
+
+    private productData prodData;
+
+    private Image image;
+    public void setData(productData prodData)
+    {
+        this.prodData = prodData;
+        prod_name.setText(prodData.getProductName());
+        prod_price.setText(String.valueOf(prodData.getPrice()) + " VNĐ");
+        String path = "File:" + prodData.getImage();
+        image = new Image(path, 190, 94, false, true);
+        prod_imagineView.setImage(image);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
