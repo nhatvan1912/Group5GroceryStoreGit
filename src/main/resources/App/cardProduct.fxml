@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="card_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="286.0" stylesheets="@cardDesign..css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.cardProductController">
+<AnchorPane fx:id="card_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="286.0" stylesheets="@cardDesign.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.cardProductController">
     <children>
         <VBox layoutX="52.0" layoutY="-10.0" prefHeight="223.0" prefWidth="283.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -50,7 +50,7 @@
                                 <Insets right="10.0" />
                             </HBox.margin>
                         </Spinner>
-                        <Button fx:id="prod_addBtn" mnemonicParsing="false" onAction="#addBtn" styleClass="btn" stylesheets="@cardDesign..css" text="Add" />
+                        <Button fx:id="prod_addBtn" mnemonicParsing="false" onAction="#addBtn" styleClass="btn" stylesheets="@cardDesign.css" text="Add" />
                     </children>
                 </HBox>
             </children>
