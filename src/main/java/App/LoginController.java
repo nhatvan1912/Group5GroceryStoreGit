@@ -113,7 +113,7 @@ public class LoginController {
 
                 result = prepare.executeQuery();
                 if(result.next()){
-                    cardProductController.username = si_username.getText();
+                    data.username = si_username.getText();
                     MainInterfaceController.username = si_username.getText();
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");

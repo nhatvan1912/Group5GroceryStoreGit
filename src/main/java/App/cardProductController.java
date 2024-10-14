@@ -135,7 +135,7 @@ public class cardProductController implements Initializable {
                     Date date = new Date();
                     java.sql.Date sqlDate = new java.sql.Date(date.getTime());
                     prepare.setString(5, String.valueOf(sqlDate));
-                    prepare.setString(6, username);
+                    prepare.setString(6, data.username);
                     prepare.executeUpdate();
 
                     int upStock = checkStck - qty;
