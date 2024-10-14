@@ -3,13 +3,12 @@ package App;
 import java.sql.Date;
 
 public class productData {
-    private Integer id, stock;
+    private Integer id, stock, price;
     private String productID, productName, status, image, type;
-    private Double price;
     private Date date;
 
     public productData(Integer id, String productID, String productName,
-                       String type, Integer stock, Double price,
+                       String type, Integer stock, Integer price,
                        String status, String image, Date date) {
         this.id = id;
         this.stock = stock;
@@ -20,6 +19,15 @@ public class productData {
         this.price = price;
         this.date = date;
         this.image = image;
+    }
+
+    public productData(Integer id, String productID, String productName, Integer price, String image, Date date) {
+        this.id = id;
+        this.productID = productID;
+        this.productName = productName;
+        this.price = price;
+        this.image = image;
+        this.date = date;
     }
 
     public Integer getId() {
@@ -37,7 +45,7 @@ public class productData {
     public Integer getStock() {
         return stock;
     }
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
     public String getStatus() {
