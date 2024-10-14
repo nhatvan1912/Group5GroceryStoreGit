@@ -21,12 +21,13 @@ public class productData {
         this.image = image;
     }
 
-    public productData(Integer id, String productID, String productName, Integer price, String image) {
+    public productData(Integer id, String productID, String productName, Integer price, String image, Date date) {
         this.id = id;
         this.productID = productID;
         this.productName = productName;
         this.price = price;
         this.image = image;
+        this.date = date;
     }
 
     public Integer getId() {

@@ -90,7 +90,7 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="dashboard_form" layoutX="308.0" layoutY="137.0" prefHeight="600.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="dashboard_form" layoutX="308.0" layoutY="137.0" prefHeight="600.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane prefHeight="179.0" prefWidth="850.0" stylesheets="@mainInterfaceDesign.css" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                  <styleClass>
@@ -103,7 +103,7 @@
                                        <content>
                                           <AnchorPane minHeight="164.0" minWidth="851.0" prefHeight="164.0" prefWidth="1120.0" styleClass="radius" stylesheets="@mainInterfaceDesign.css">
                                              <children>
-                                                <AnchorPane layoutX="8.0" layoutY="5.0" prefHeight="155.0" prefWidth="261.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css">
+                                                <AnchorPane layoutX="8.0" layoutY="5.0" prefHeight="155.0" prefWidth="263.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css">
                                                    <children>
                                                       <FontAwesomeIcon fill="WHITE" glyphName="USERS" layoutX="26.0" layoutY="98.0" size="5em" />
                                                       <Label layoutX="90.0" layoutY="114.0" text="Number Customer" textFill="WHITE">
@@ -118,7 +118,7 @@
                                                       </Label>
                                                    </children>
                                                 </AnchorPane>
-                                                <AnchorPane layoutX="288.0" layoutY="5.0" prefHeight="155.0" prefWidth="261.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css">
+                                                <AnchorPane layoutX="284.0" layoutY="4.0" prefHeight="155.0" prefWidth="263.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css">
                                                    <children>
                                                       <FontAwesomeIcon fill="WHITE" glyphName="DOLLAR" layoutX="26.0" layoutY="98.0" size="5em" />
                                                       <Label layoutX="125.0" layoutY="114.0" text="Today Income" textFill="WHITE">
@@ -133,7 +133,22 @@
                                                       </Label>
                                                    </children>
                                                 </AnchorPane>
-                                                <AnchorPane layoutX="569.0" layoutY="5.0" prefHeight="155.0" prefWidth="261.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css" AnchorPane.rightAnchor="289.4">
+                                                <AnchorPane layoutX="839.0" layoutY="5.0" prefHeight="155.0" prefWidth="263.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css">
+                                                   <children>
+                                                      <FontAwesomeIcon fill="WHITE" glyphName="SHOPPING_CART" layoutX="26.0" layoutY="98.0" size="5em" />
+                                                      <Label layoutX="90.0" layoutY="114.0" text="Number Product" textFill="WHITE" AnchorPane.rightAnchor="23.0">
+                                                         <font>
+                                                            <Font size="18.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label layoutX="227.0" layoutY="14.0" text="0" textFill="WHITE">
+                                                         <font>
+                                                            <Font size="20.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane layoutX="560.0" layoutY="5.0" prefHeight="155.0" prefWidth="263.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css" AnchorPane.rightAnchor="296.79999999999995">
                                                    <children>
                                                       <Label layoutX="131.0" layoutY="114.0" text="Total Revenue" textFill="WHITE">
                                                          <font>
@@ -150,21 +165,6 @@
                                                             <Image url="@../Utils/Image/revenue.png" />
                                                          </image>
                                                       </ImageView>
-                                                   </children>
-                                                </AnchorPane>
-                                                <AnchorPane layoutX="849.0" layoutY="5.0" prefHeight="155.0" prefWidth="261.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css">
-                                                   <children>
-                                                      <FontAwesomeIcon fill="WHITE" glyphName="SHOPPING_CART" layoutX="26.0" layoutY="98.0" size="5em" />
-                                                      <Label layoutX="90.0" layoutY="114.0" text="Number Product" textFill="WHITE" AnchorPane.rightAnchor="23.0">
-                                                         <font>
-                                                            <Font size="18.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <Label layoutX="227.0" layoutY="14.0" text="0" textFill="WHITE">
-                                                         <font>
-                                                            <Font size="20.0" />
-                                                         </font>
-                                                      </Label>
                                                    </children>
                                                 </AnchorPane>
                                              </children>
@@ -310,7 +310,7 @@
                               <Separator layoutX="8.0" layoutY="311.0" prefHeight="0.0" prefWidth="865.0" AnchorPane.bottomAnchor="286.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="menu_form" layoutX="240.0" layoutY="165.0" prefHeight="600.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="menu_form" layoutX="240.0" layoutY="165.0" prefHeight="600.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="14.4" layoutY="15.2" prefHeight="570.0" prefWidth="518.0" stylesheets="@mainInterfaceDesign.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="348.0" AnchorPane.topAnchor="15.0">
                                  <styleClass>

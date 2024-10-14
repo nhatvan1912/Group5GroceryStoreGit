@@ -439,7 +439,7 @@ public class MainInterfaceController implements Initializable {
             {
                 prod = new productData(result.getInt("id"), result.getString("prod_id"),
                         result.getString("prod_name"), result.getInt("price"),
-                        result.getString("image"));
+                        result.getString("image"), result.getDate("date"));
 
                 listData.add(prod);
             }
@@ -480,6 +480,46 @@ public class MainInterfaceController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private int cID;
+    public void customerID()
+    {
+
+        String sql = "SELECT MAX(customer_id) FROM customer";
+        connect = Database.connectDB();
+
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            if (result.next())
+            {
+                cID = result.getInt("MAX(customer_id)");
+            }
+
+            String checkCID = "SELECT MAX(customer_id) FROM receipt";
+            prepare = connect.prepareStatement(checkCID);
+            result = prepare.executeQuery();
+            int checkID = 0;
+            if (result.next())
+            {
+                checkID = result.getInt("MAX(customer_id)");
+            }
+
+            if (cID == 0)
+            {
+                cID += 1;
+            }
+            else if (cID == checkID)
+            {
+                cID += 1;
+            }
+
+            data.cID = cID;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
