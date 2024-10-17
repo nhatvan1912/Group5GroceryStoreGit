@@ -683,9 +683,25 @@ public class MainInterfaceController implements Initializable {
             String deleteData = "DELETE FROM customer WHERE id = '" + getid + "'";
             connect = Database.connectDB();
             try{
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you want to delete this order");
+                Optional<ButtonType> option = alert.showAndWait();
 
-                prepare = connect.prepareStatement(deleteData);
-                prepare.executeUpdate();
+                if (option.get().equals(ButtonType.OK)) {
+                    prepare = connect.prepareStatement(deleteData);
+                    prepare.executeUpdate();
+                    menuShowTotal();
+                    menuShowOrderData();
+                }
+                else{
+                    alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Cancelled");
+                    alert.showAndWait();
+                }
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
