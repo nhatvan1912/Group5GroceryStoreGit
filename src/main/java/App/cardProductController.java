@@ -1,12 +1,15 @@
 package App;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -74,9 +77,14 @@ public class cardProductController implements Initializable {
 
     private int totalP;
     private int pr;
+    private MainInterfaceController mainController;
+
+    public void setMainController(MainInterfaceController mainController) {
+        this.mainController = mainController;
+    }
+
     public void addBtn()
     {
-
         MainInterfaceController mForm = new MainInterfaceController();
         mForm.customerID();
 
@@ -88,8 +96,34 @@ public class cardProductController implements Initializable {
         connect = Database.connectDB();
 
         try{
+            int checkStck = 0;
+            String checkStock = "SELECT stock FROM product WHERE prod_id = '"
+                    + prodID + "'";
+            prepare = connect.prepareStatement(checkStock);
+            result = prepare.executeQuery();
+
+            if (result.next())
+            {
+                checkStck = result.getInt("stock");
+            }
+
+            if (checkStck == 0)
+            {
+                String  updateStock =  "UPDATE product SET prod_name = '"
+                        + prod_name.getText() + "', type = '"
+                        + type + "', stock = 0, price = "
+                        + pr + ", status = 'Unavailable', image = '"
+                        + prod_image + "', date = '"
+                        + prod_date + "' WHERE prod_id = '"
+                        + prodID + "'";
+
+                prepare = connect.prepareStatement(updateStock);
+                prepare.executeUpdate();
+            }
+
             prepare = connect.prepareStatement(checkAvailable);
             result = prepare.executeQuery();
+
             if (result.next())
             {
                 check = result.getString("status");
@@ -104,9 +138,9 @@ public class cardProductController implements Initializable {
                 alert.showAndWait();
             }
             else{
-                int checkStck = 0;
-                String checkStock = "SELECT stock FROM product WHERE prod_id = '"
-                        + prodID + "'";
+                checkStck = 0;
+//                String checkStock = "SELECT stock FROM product WHERE prod_id = '"
+//                        + prodID + "'";
                 prepare = connect.prepareStatement(checkStock);
                 result = prepare.executeQuery();
                 if (result.next())
@@ -120,9 +154,12 @@ public class cardProductController implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("Invalid. This product is Out of stock");
                     alert.showAndWait();
-                } else {
-
-
+                }
+                else if (checkStck == 0)
+                {
+//                    String
+                }
+                else {
                     String insertData = "INSERT INTO customer "
                             + "(customer_id, prod_name, quantity, price, date, em_username)"
                             + "VALUES(?, ?, ?, ?, ?, ?)";
@@ -162,6 +199,9 @@ public class cardProductController implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("Successfully Added!");
                     alert.showAndWait();
+                    spin.setValue(0);
+                    mainController.menuShowTotal();
+                    mainController.menuShowOrderData();
                 }
             }
         } catch (Exception e) {

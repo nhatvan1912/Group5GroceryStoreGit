@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -117,13 +118,13 @@ public class MainInterfaceController implements Initializable {
     private Label menu_change;
 
     @FXML
-    private TableColumn<?, ?> menu_col_price;
+    private TableColumn<productData, String> menu_col_price;
 
     @FXML
-    private TableColumn<?, ?> menu_col_productName;
+    private TableColumn<productData, String> menu_col_productName;
 
     @FXML
-    private TableColumn<?, ?> menu_col_quantity;
+    private TableColumn<productData, Integer> menu_col_quantity;
 
     @FXML
     private AnchorPane menu_form;
@@ -144,7 +145,7 @@ public class MainInterfaceController implements Initializable {
     private ScrollPane menu_scrollPane;
 
     @FXML
-    private TableView<?> menu_tableView;
+    private TableView<productData> menu_tableView;
 
     @FXML
     private Label menu_total;
@@ -437,9 +438,14 @@ public class MainInterfaceController implements Initializable {
 
             while (result.next())
             {
-                prod = new productData(result.getInt("id"), result.getString("prod_id"),
-                        result.getString("prod_name"), result.getInt("price"),
-                        result.getString("image"), result.getDate("date"));
+                prod = new productData(result.getInt("id"),
+                        result.getString("prod_id"),
+                        result.getString("prod_name"),
+                        result.getString("type"),
+                        result.getInt("stock"),
+                        result.getInt("price"),
+                        result.getString("image"),
+                        result.getDate("date"));
 
                 listData.add(prod);
             }
@@ -468,6 +474,7 @@ public class MainInterfaceController implements Initializable {
                 load.setLocation(getClass().getResource("cardProduct.fxml"));
                 AnchorPane pane = load.load();
                 cardProductController cardC = load.getController();
+                cardC.setMainController(this);
                 cardC.setData(cardListData.get(q));
 
                 if (column == 3){
@@ -479,6 +486,225 @@ public class MainInterfaceController implements Initializable {
                 GridPane.setMargin(pane, new Insets(10));
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public ObservableList<productData> menuGetOrder()
+    {
+        customerID();
+        ObservableList<productData> listData = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM customer WHERE customer_id = '" + cID + "'";
+        connect = Database.connectDB();
+
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            productData prod;
+            while (result.next())
+            {
+                prod = new productData(result.getInt("id"),
+                        result.getString("prod_name"),
+                        result.getInt("quantity"),
+                        result.getInt("price"),
+                        result.getDate("date"));
+                listData.add(prod);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listData;
+    }
+
+    private ObservableList<productData> menuOrderListData;
+    public void menuShowOrderData()
+    {
+        menuOrderListData = menuGetOrder();
+        menu_col_productName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        menu_col_quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        menu_col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        menu_tableView.setItems(menuOrderListData);
+    }
+
+    private int totalP;
+    public void menuGetTotal(){
+        customerID();
+        String total = "SELECT SUM(price) FROM customer WHERE customer_id = '"
+                + cID + "'";
+
+        connect = Database.connectDB();
+
+        try{
+            prepare = connect.prepareStatement(total);
+            result = prepare.executeQuery();
+
+            if (result.next())
+            {
+                totalP = result.getInt("SUM(price)");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void menuShowTotal()
+    {
+        menuGetTotal();
+        System.out.println(totalP);
+        menu_total.setText(totalP + " VNĐ");
+    }
+
+    private int amount, change;
+    public void menuAmount()
+    {
+        menuGetTotal();
+        if (menu_amount.getText().isEmpty() || totalP == 0)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("INVALID!");
+            alert.showAndWait();
+            menu_change.setText("");
+        }
+        else{
+            amount = Integer.parseInt(menu_amount.getText());
+            change = amount - totalP;
+            if (amount < totalP)
+            {
+                menu_change.setText(change + " VNĐ");
+            }
+            else{
+                menu_change.setText(change + " VNĐ");
+            }
+        }
+    }
+
+    public void menuPayBtn()
+    {
+        customerID();
+        menuAmount();
+        System.out.println(totalP);
+        if (totalP == 0)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please choose product");
+            alert.showAndWait();
+            menu_change.setText("");
+        }
+        else{
+            String insertPay = "INSERT INTO receipt (customer_id, total, date, em_username)"
+                    + "VALUES( ?, ?, ?, ?)";
+
+            connect = Database.connectDB();
+
+            try {
+                alert = new Alert((Alert.AlertType.CONFIRMATION));
+                alert.setTitle("Confirmation Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Are your sure?");
+                Optional<ButtonType> option = alert.showAndWait();
+
+                if (option.get().equals(ButtonType.OK)) {
+                    System.out.println(change < 0);
+                    prepare = connect.prepareStatement(insertPay);
+
+                    if (change < 0) {
+                        System.out.println(change);
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Don't enough money to pay");
+                        alert.showAndWait();
+                        menu_change.setText("");
+                    } else {
+                        System.out.println(change);
+                        prepare.setString(1, String.valueOf(cID));
+                        prepare.setString(2, String.valueOf(totalP));
+                        Date date = new Date();
+                        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                        prepare.setString(3, String.valueOf(sqlDate));
+                        prepare.setString(4, data.username);
+
+                        prepare.executeUpdate();
+
+                        alert = new Alert((Alert.AlertType.CONFIRMATION));
+                        alert.setTitle("Confirmation Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Pay successfully");
+                        alert.setContentText("Grocery5 thanks you very much!!!");
+                        alert.showAndWait();
+                        menuShowOrderData();
+                        menuShowTotal();
+                        menu_amount.setText("");
+                        menu_change.setText(0 + " VNĐ");
+                    }
+                }
+                    else{
+                        alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Information Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Cancelled");
+                        alert.showAndWait();
+                    }
+            }
+            catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private int getid;
+    public void menuSelectOrder()
+    {
+        productData prod = menu_tableView.getSelectionModel().getSelectedItem();
+        int num = menu_tableView.getSelectionModel().getSelectedIndex();
+
+        if ((num -1) < -1) return;
+
+        getid = prod.getId();
+    }
+
+    public void menuRemoveBtn(){
+        menuSelectOrder();
+        if (getid == 0)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select the order you want to remove");
+            alert.showAndWait();
+        }
+        else {
+            String deleteData = "DELETE FROM customer WHERE id = '" + getid + "'";
+            connect = Database.connectDB();
+            try{
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you want to delete this order");
+                Optional<ButtonType> option = alert.showAndWait();
+
+                if (option.get().equals(ButtonType.OK)) {
+                    prepare = connect.prepareStatement(deleteData);
+                    prepare.executeUpdate();
+                    menuShowTotal();
+                    menuShowOrderData();
+                }
+                else{
+                    alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Cancelled");
+                    alert.showAndWait();
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -574,6 +800,9 @@ public class MainInterfaceController implements Initializable {
             menu_form.setVisible(true);
 
             menuDisplayCard();
+            menuGetOrder();
+            menuShowTotal();
+            menuShowOrderData();
         }
     }
 
@@ -585,5 +814,8 @@ public class MainInterfaceController implements Initializable {
         inventoryShowData();
 
         menuDisplayCard();
+        menuGetOrder();
+        menuShowTotal();
+        menuShowOrderData();
     }
 }

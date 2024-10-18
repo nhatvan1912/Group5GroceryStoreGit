@@ -337,7 +337,7 @@
                                     <String fx:value="radius" />
                                  </styleClass>
                                  <children>
-                                    <TableView fx:id="menu_tableView" layoutX="14.0" layoutY="14.0" prefHeight="245.0" prefWidth="298.0" styleClass="table-design" stylesheets="@mainInterfaceDesign.css" AnchorPane.bottomAnchor="310.0" AnchorPane.topAnchor="14.0">
+                                    <TableView fx:id="menu_tableView" layoutX="14.0" layoutY="14.0" onMouseClicked="#menuSelectOrder" prefHeight="245.0" prefWidth="298.0" styleClass="table-design" stylesheets="@mainInterfaceDesign.css" AnchorPane.bottomAnchor="310.0" AnchorPane.topAnchor="14.0">
                                       <columns>
                                         <TableColumn fx:id="menu_col_productName" prefWidth="116.8001070022583" text="Product Name" />
                                         <TableColumn fx:id="menu_col_quantity" prefWidth="75.199951171875" text="Quantity" />
@@ -359,7 +359,10 @@
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="menu_amount" layoutX="134.0" layoutY="301.0" prefHeight="26.0" prefWidth="134.0" AnchorPane.bottomAnchor="230.0" AnchorPane.rightAnchor="9.999999999999972" />
+                                    <TextField fx:id="menu_amount" layoutX="134.0" layoutY="301.0" onAction="#menuAmount" prefHeight="26.0" prefWidth="134.0" AnchorPane.bottomAnchor="230.0" AnchorPane.rightAnchor="9.999999999999972">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font></TextField>
                                     <Label layoutX="75.0" layoutY="327.0" prefHeight="22.0" prefWidth="58.0" text="Change:" AnchorPane.bottomAnchor="200.0">
                                        <font>
                                           <Font size="15.0" />
@@ -370,7 +373,7 @@
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="menu_payBtn" layoutX="14.0" layoutY="411.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="300.0" styleClass="btn" stylesheets="@mainInterfaceDesign.css" text="PAY" AnchorPane.bottomAnchor="118.0">
+                                    <Button fx:id="menu_payBtn" layoutX="14.0" layoutY="411.0" mnemonicParsing="false" onAction="#menuPayBtn" prefHeight="43.0" prefWidth="300.0" styleClass="btn" stylesheets="@mainInterfaceDesign.css" text="PAY" AnchorPane.bottomAnchor="118.0">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -380,7 +383,7 @@
                                           <Font size="20.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="menu_removeBtn" layoutX="14.0" layoutY="470.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="133.0" styleClass="btn" stylesheets="@mainInterfaceDesign.css" text="Remove" AnchorPane.bottomAnchor="60.0">
+                                    <Button fx:id="menu_removeBtn" layoutX="14.0" layoutY="470.0" mnemonicParsing="false" onAction="#menuRemoveBtn" prefHeight="43.0" prefWidth="133.0" styleClass="btn" stylesheets="@mainInterfaceDesign.css" text="Remove" AnchorPane.bottomAnchor="60.0">
                                        <font>
                                           <Font size="20.0" />
                                        </font>

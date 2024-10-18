@@ -3,7 +3,7 @@ package App;
 import java.sql.Date;
 
 public class productData {
-    private Integer id, stock, price;
+    private Integer id, stock, price, quantity;
     private String productID, productName, status, image, type;
     private Date date;
 
@@ -21,12 +21,26 @@ public class productData {
         this.image = image;
     }
 
-    public productData(Integer id, String productID, String productName, Integer price, String image, Date date) {
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public productData(Integer id, String productID, String productName, String type, int quantity, Integer price, String image, Date date) {
         this.id = id;
         this.productID = productID;
         this.productName = productName;
+        this.type = type;
         this.price = price;
         this.image = image;
+        this.date = date;
+        this.quantity = quantity;
+    }
+
+    public productData(Integer id, String productName, Integer quantity, Integer price, Date date) {
+        this.id = id;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.price = price;
         this.date = date;
     }
 
