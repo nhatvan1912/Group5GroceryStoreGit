@@ -25,7 +25,17 @@
       <version>20.0.1</version>
     </dependency>
 
-<dependency>
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx</artifactId>
+      <version>11</version>
+      <type>pom</type>
+    </dependency>
+
+
+
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
@@ -36,6 +46,7 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.33</version>
     </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
@@ -48,6 +59,14 @@
       <version>8.2</version>
       <scope>compile</scope>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports</artifactId>
+      <version>7.0.1</version>
+    </dependency>
+
   </dependencies>
 
   <build>
