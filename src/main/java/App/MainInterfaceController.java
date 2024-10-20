@@ -367,6 +367,11 @@ public class MainInterfaceController implements Initializable {
         inventory_imageView.setImage(image);
     }
 
+
+
+
+
+
     public ObservableList<productData> inventoryDataList(){
         ObservableList<productData> listData = FXCollections.observableArrayList();
         String table = "select * from product";
