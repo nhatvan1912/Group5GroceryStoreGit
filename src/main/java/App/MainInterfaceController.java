@@ -9,8 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -172,7 +172,7 @@ public class MainInterfaceController implements Initializable {
     private ResultSet result;
 
     private ObservableList<productData> cardListData = FXCollections.observableArrayList();
-    private System JRXmlLoader;
+
 
 
     public void inventoryAddBtn(){
@@ -645,7 +645,7 @@ public class MainInterfaceController implements Initializable {
                         alert.setContentText("Grocery5 thanks you very much!!!");
                         alert.showAndWait();
                         menuShowOrderData();
-                        menuRestart();
+//                        menuRestart();
 
 
                         menuShowTotal();
@@ -829,9 +829,8 @@ public class MainInterfaceController implements Initializable {
             alert.showAndWait();
         }
         else {
-            customerID();
             HashMap map = new HashMap();
-            map.put("getReceipt", cID);
+            map.put("getReceipt", (cID - 1));
 
             try {
 
@@ -839,8 +838,7 @@ public class MainInterfaceController implements Initializable {
                 JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
 
                 JasperViewer.viewReport(jPrint, false);
-
-              menuRestart();
+                menuRestart();
 
             }catch(Exception e){
                 e.printStackTrace();
@@ -859,6 +857,5 @@ public class MainInterfaceController implements Initializable {
         menuGetOrder();
         menuShowTotal();
         menuShowOrderData();
-        menuReceiptBtn();
     }
 }
