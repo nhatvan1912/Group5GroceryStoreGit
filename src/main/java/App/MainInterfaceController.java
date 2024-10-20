@@ -642,6 +642,7 @@ public class MainInterfaceController implements Initializable {
                         menuShowTotal();
                         menu_amount.setText("");
                         menu_change.setText(0 + " VNĐ");
+                        System.out.println(totalP);
                     }
                 }
                     else{
@@ -707,6 +708,16 @@ public class MainInterfaceController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void menuRestart()
+    {
+        totalP = 0;
+        change = 0;
+        amount = 0;
+        menu_total.setText("0 VNĐ");
+        menu_amount.setText("");
+        menu_change.setText("0 VNĐ");
     }
 
     private int cID;
