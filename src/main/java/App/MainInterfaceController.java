@@ -1,12 +1,5 @@
 package App;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.*;
-import java.util.* ;
-import java.util.Date;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,9 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -25,6 +18,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
+
+import java.io.File;
+import java.net.URL;
+import java.sql.*;
+import java.util.Date;
+import java.util.*;
+
 
 public class MainInterfaceController implements Initializable {
     @FXML
@@ -167,6 +172,7 @@ public class MainInterfaceController implements Initializable {
     private ResultSet result;
 
     private ObservableList<productData> cardListData = FXCollections.observableArrayList();
+    private System JRXmlLoader;
 
 
     public void inventoryAddBtn(){
@@ -644,10 +650,10 @@ public class MainInterfaceController implements Initializable {
                         alert.setContentText("Grocery5 thanks you very much!!!");
                         alert.showAndWait();
                         menuShowOrderData();
-                        menuShowTotal();
+
+                        menu_total.setText(0 + " VNĐ");
                         menu_amount.setText("");
                         menu_change.setText(0 + " VNĐ");
-                        System.out.println(totalP);
                     }
                 }
                     else{
@@ -715,16 +721,6 @@ public class MainInterfaceController implements Initializable {
         }
     }
 
-    public void menuRestart()
-    {
-        totalP = 0;
-        change = 0;
-        amount = 0;
-        menu_total.setText("0 VNĐ");
-        menu_amount.setText("");
-        menu_change.setText("0 VNĐ");
-    }
-
     private int cID;
     public void customerID()
     {
@@ -790,7 +786,14 @@ public class MainInterfaceController implements Initializable {
         user = user.substring(0,1).toUpperCase() + user.substring(1);
         main_username.setText(user);
     }
-
+    public void menuRestart(){
+        totalP = 0;
+        change = 0;
+        amount = 0;
+        menu_total.setText("0");
+        menu_amount.setText("");
+        menu_change.setText("0");
+    }
     public void switchForm(ActionEvent event)
     {
         if (event.getSource() == dashboard_btn)
@@ -819,6 +822,32 @@ public class MainInterfaceController implements Initializable {
             menuGetOrder();
             menuShowTotal();
             menuShowOrderData();
+        }
+    }
+    public void menuReceiptBtn(){
+        if(totalP == 0 || menu_amount.getText().isEmpty()){
+            alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setContentText("Please order first");
+            alert.showAndWait();
+        }
+        else {
+
+            HashMap map = new HashMap();
+            map.put("getReceipt", (cID - 1));
+
+            try {
+
+                JasperReport jReport = JasperCompileManager.compileReport("D:\\GitHub\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
+                JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
+
+                JasperViewer.viewReport(jPrint, false);
+
+              menuRestart();
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

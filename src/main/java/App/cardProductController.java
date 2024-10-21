@@ -85,8 +85,7 @@ public class cardProductController implements Initializable {
 
     public void addBtn()
     {
-        MainInterfaceController mForm = new MainInterfaceController();
-        mForm.customerID();
+        mainController.customerID();
 
         qty = prod_spinner.getValue();
         String check = "";
@@ -138,8 +137,6 @@ public class cardProductController implements Initializable {
             }
             else{
                 checkStck = 0;
-//                String checkStock = "SELECT stock FROM product WHERE prod_id = '"
-//                        + prodID + "'";
                 prepare = connect.prepareStatement(checkStock);
                 result = prepare.executeQuery();
                 if (result.next())
@@ -153,10 +150,6 @@ public class cardProductController implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("Invalid. This product is Out of stock");
                     alert.showAndWait();
-                }
-                else if (checkStck == 0)
-                {
-//                    String
                 }
                 else {
                     String insertData = "INSERT INTO customer "
@@ -190,7 +183,7 @@ public class cardProductController implements Initializable {
 
                     prepare = connect.prepareStatement(updateStock);
                     prepare.executeUpdate();
-
+                    
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);
