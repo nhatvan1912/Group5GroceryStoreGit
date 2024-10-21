@@ -206,7 +206,7 @@ public class MainInterfaceController implements Initializable {
                     prepare.setString(4, inventory_stock.getText());
                     prepare.setString(5, inventory_price.getText());
                     prepare.setString(6, inventory_status.getSelectionModel().getSelectedItem().toString());
-                    String pathTemp = path.replace("/", "//");
+                    String pathTemp = path.replace("\\", "\\\\");
                     prepare.setString(7, pathTemp);
                     Date date = new Date();
                     java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -360,12 +360,17 @@ public class MainInterfaceController implements Initializable {
         inventory_price.setText(String.valueOf(prodData.getPrice()));
         inventory_type.getSelectionModel().select(prodData.getType());
         inventory_status.getSelectionModel().select(prodData.getStatus());
-        path = "File:" + prodData.getImage();
+        String pathTemp = "File:" + prodData.getImage();
         date = String.valueOf(prodData.getDate());
         id = prodData.getId();
-        image = new Image(path, 130, 140, true, true);
+        image = new Image(pathTemp, 130, 140, true, true);
         inventory_imageView.setImage(image);
     }
+
+
+
+
+
 
     public ObservableList<productData> inventoryDataList(){
         ObservableList<productData> listData = FXCollections.observableArrayList();
