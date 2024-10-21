@@ -91,7 +91,6 @@ public class cardProductController implements Initializable {
         qty = prod_spinner.getValue();
         String check = "";
         String checkAvailable = "SELECT status FROM product WHERE prod_id =  '" + prodID + "'";
-        System.out.println("prodID: " + prodID);
 
         connect = Database.connectDB();
 
@@ -178,8 +177,6 @@ public class cardProductController implements Initializable {
                     int upStock = checkStck - qty;
 
                     prod_image = prod_image.replace("\\", "\\\\");
-
-//                    System.out.println("Date: " + prod_date);
 
                     String updateStock = "UPDATE product SET prod_name = '"
                             + prod_name.getText() + "', type = '"
