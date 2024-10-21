@@ -18,7 +18,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -650,12 +650,10 @@ public class MainInterfaceController implements Initializable {
                         alert.setContentText("Grocery5 thanks you very much!!!");
                         alert.showAndWait();
                         menuShowOrderData();
-                        menuRestart();
 
-
-                        menuShowTotal();
-                        menu_amount.setText("");
-                        menu_change.setText(0 + " VNĐ");
+//                        menuShowTotal();
+//                        menu_amount.setText("");
+//                        menu_change.setText(0 + " VNĐ");
                     }
                 }
                     else{
@@ -834,9 +832,9 @@ public class MainInterfaceController implements Initializable {
             alert.showAndWait();
         }
         else {
-            customerID();
+
             HashMap map = new HashMap();
-            map.put("getReceipt", cID);
+            map.put("getReceipt", (cID - 1));
 
             try {
 
@@ -864,6 +862,5 @@ public class MainInterfaceController implements Initializable {
         menuGetOrder();
         menuShowTotal();
         menuShowOrderData();
-        menuReceiptBtn();
     }
 }

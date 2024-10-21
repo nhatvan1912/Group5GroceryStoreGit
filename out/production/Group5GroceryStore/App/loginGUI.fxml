@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.LoginController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <AnchorPane fx:id="si_loginForm" layoutX="300.0" prefHeight="400.0" prefWidth="280.0" stylesheets="@loginDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label layoutX="30.0" layoutY="60.0" styleClass="head-label" stylesheets="@loginDesign.css" text="Login Account" textFill="#d5e42a" AnchorPane.leftAnchor="30.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="si_username" layoutX="45.0" layoutY="140.0" prefHeight="30.0" prefWidth="220.0" promptText="Username" styleClass="text-field" stylesheets="@loginDesign.css" />
+                  <PasswordField fx:id="si_password" layoutX="45.0" layoutY="185.0" minHeight="30.0" minWidth="220.0" promptText="Password" styleClass="text-field" stylesheets="@loginDesign.css" AnchorPane.leftAnchor="45.0" />
+                  <Button fx:id="si_loginBtn" layoutX="45.0" layoutY="250.0" minHeight="40.0" minWidth="220.0" mnemonicParsing="false" onAction="#loginBtn" styleClass="login-btn" stylesheets="@loginDesign.css" text="Login" AnchorPane.leftAnchor="45.0" />
+                  <Hyperlink fx:id="forgotPassword" layoutX="45.0" layoutY="220.0" onAction="#forgotPassword" stylesheets="@loginDesign.css" text="Forgot Password?" />
+               </children>
+               <styleClass>
+                  <String fx:value="white-form" />
+                  <String fx:value="container" />
+               </styleClass>
+            </AnchorPane>
+            <AnchorPane fx:id="su_signupForm" layoutX="300.0" prefHeight="400.0" prefWidth="300.0" styleClass="white-form" stylesheets="@loginDesign.css" visible="false">
+               <children>
+                  <Label layoutX="30.0" layoutY="60.0" styleClass="head-label" stylesheets="@loginDesign.css" text="Register Account" textFill="#d5e42a">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="su_username" layoutX="45.0" layoutY="110.0" prefHeight="30.0" prefWidth="220.0" promptText="Username" styleClass="text-field" stylesheets="@loginDesign.css" />
+                  <PasswordField fx:id="su_password" layoutX="45.0" layoutY="150.0" minHeight="30.0" minWidth="220.0" promptText="Password" styleClass="text-field" stylesheets="@loginDesign.css" />
+                  <Button fx:id="su_signupBtn" layoutX="45.0" layoutY="280.0" minHeight="40.0" minWidth="220.0" mnemonicParsing="false" onAction="#registerBtn" styleClass="login-btn" stylesheets="@loginDesign.css" text="Sign Up" />
+                  <ComboBox fx:id="su_question" layoutX="45.0" layoutY="190.0" minHeight="30.0" minWidth="220.0" prefWidth="150.0" promptText="Question" styleClass="text-field" stylesheets="@loginDesign.css" />
+                  <PasswordField fx:id="su_answer" layoutX="45.0" layoutY="230.0" minHeight="30.0" minWidth="220.0" promptText="Answer" styleClass="text-field" stylesheets="@loginDesign.css" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="fp_questionForm" layoutX="300.0" prefHeight="400.0" prefWidth="300.0" styleClass="white-form" stylesheets="@loginDesign.css" visible="false">
+               <children>
+                  <Label layoutX="30.0" layoutY="60.0" styleClass="head-label" stylesheets="@loginDesign.css" text="Forgot Password" textFill="#d5e42a">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="fp_question" layoutX="45.0" layoutY="162.0" minHeight="30.0" minWidth="220.0" prefWidth="150.0" promptText="Question" styleClass="text-field" stylesheets="@loginDesign.css" />
+                  <PasswordField fx:id="fp_answer" layoutX="45.0" layoutY="207.0" minHeight="30.0" minWidth="220.0" promptText="Answer" styleClass="text-field" stylesheets="@loginDesign.css" />
+                  <Button fx:id="fp_confirmBtn" layoutX="45.0" layoutY="262.0" minHeight="40.0" minWidth="220.0" mnemonicParsing="false" onAction="#confirmQuestionBtn" styleClass="login-btn" stylesheets="@loginDesign.css" text="Confirm Question" />
+                  <Button layoutX="116.0" layoutY="338.0" mnemonicParsing="false" onAction="#backToLoginForm" prefHeight="36.0" prefWidth="68.0" styleClass="login-btn" stylesheets="@loginDesign.css" text="Back">
+                     <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="ANGLE_LEFT" size="1.5em" />
+                     </graphic>
+                  </Button>
+                  <TextField fx:id="fp_username" layoutX="45.0" layoutY="117.0" prefHeight="30.0" prefWidth="220.0" promptText="Username" styleClass="text-field" stylesheets="@loginDesign.css" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="fp_newPassForm" layoutX="300.0" prefHeight="400.0" prefWidth="300.0" styleClass="white-form" stylesheets="@loginDesign.css" visible="false">
+               <children>
+                  <Label layoutX="30.0" layoutY="60.0" styleClass="head-label" stylesheets="@loginDesign.css" text="Forgot Password" textFill="#d5e42a">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="fp_newPassword" layoutX="45.0" layoutY="140.0" minHeight="30.0" minWidth="220.0" promptText="New Password" styleClass="text-field" stylesheets="@loginDesign.css" />
+                  <PasswordField fx:id="fp_confirmPassword" layoutX="45.0" layoutY="185.0" minHeight="30.0" minWidth="220.0" promptText="Confirm Password" styleClass="text-field" stylesheets="@loginDesign.css" />
+                  <Button fx:id="fp_changeBtn" layoutX="45.0" layoutY="240.0" minHeight="40.0" minWidth="220.0" mnemonicParsing="false" onAction="#changePassword" styleClass="login-btn" stylesheets="@loginDesign.css" text="Change Password" />
+                  <Button layoutX="116.0" layoutY="338.0" mnemonicParsing="false" onAction="#backToLoginForm" prefHeight="36.0" prefWidth="68.0" styleClass="login-btn" stylesheets="@loginDesign.css" text="Back">
+                     <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="ANGLE_LEFT" size="1.5em" />
+                     </graphic>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="site_form" prefHeight="400.0" prefWidth="300.0" styleClass="gradient" stylesheets="@loginDesign.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label layoutX="82.0" layoutY="265.0" stylesheets="@loginDesign.css" text="Create Account" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="105.0">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="site_createBtn" layoutX="40.0" layoutY="306.0" minHeight="40.0" minWidth="220.0" mnemonicParsing="false" onAction="#switchform" styleClass="create-btn" stylesheets="@loginDesign.css" text="Create new Account" AnchorPane.bottomAnchor="54.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="site_aldreadyHave" layoutX="40.0" layoutY="306.0" minHeight="40.0" minWidth="220.0" mnemonicParsing="false" onAction="#switchform" styleClass="create-btn" stylesheets="@loginDesign.css" text="Already have Account" visible="false" AnchorPane.bottomAnchor="54.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="18.0" layoutY="164.0" stylesheets="@loginDesign.css" text="Group 5 Grocery Store" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font>
+                     <effect>
+                        <Bloom />
+                     </effect>
+                  </Label>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Utils/Image/Remove-bg.ai_1728396017861.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
