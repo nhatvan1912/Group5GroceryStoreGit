@@ -1,5 +1,12 @@
 package App;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.*;
+import java.util.* ;
+import java.util.Date;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -7,8 +14,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -150,13 +161,50 @@ public class MainInterfaceController implements Initializable {
     private ScrollPane menu_scrollPane;
 
     @FXML
+    private TableColumn<customerData, String> customers_col_cashier;
+
+    @FXML
+    private TableColumn<customerData, String> customers_col_customerID;
+
+    @FXML
+    private TableColumn<customerData, String> customers_col_date;
+
+    @FXML
+    private TableColumn<customerData, String> customers_col_total;
+
+    @FXML
+    private AnchorPane customers_form;
+
+    @FXML
+    private TableView<customerData> customers_tableView;
+
+    @FXML
     private TableView<productData> menu_tableView;
 
     @FXML
     private Label menu_total;
 
     @FXML
+    private Label dashboard_NC;
+
+    @FXML
+    private Label dashboard_NSP;
+
+    @FXML
+    private Label dashboard_TI;
+
+    @FXML
+    private Label dashboard_TotalI;
+
+    @FXML
     private AnchorPane dashboard_form;
+
+    @FXML
+    private BarChart<?, ?> dashboard_customerChart;
+
+
+    @FXML
+    private AreaChart<?, ?> dashboard_incomeChart;
 
 
     public static String username;
@@ -174,6 +222,125 @@ public class MainInterfaceController implements Initializable {
     private ObservableList<productData> cardListData = FXCollections.observableArrayList();
     private System JRXmlLoader;
 
+    public void dashboardDisplayNC(){
+
+        String sql = "SELECT COUNT(id) FROM receipt";
+        connect = Database.connectDB();
+
+        try{
+            int nc = 0;
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            if(result.next()){
+                nc = result.getInt("COUNT(id)");
+            }
+            dashboard_NC.setText(String.valueOf(nc));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void dashboardDisplayTI(){
+        Date date = new Date();
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+
+        String sql = "SELECT SUM(total) FROM receipt WHERE date = '"
+         + sqlDate + "'";
+
+        connect = Database.connectDB();
+
+        try{
+            Integer ti = 0;
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            if(result.next()){
+                ti = result.getInt("SUM(total)");
+            }
+            dashboard_TI.setText("$" + ti);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    public void dashboardTotalI(){
+
+        String sql = "SELECT SUM(total) FROM receipt";
+
+        connect = Database.connectDB();
+
+        try{
+            Integer ti = 0;
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            if(result.next()){
+                ti = result.getInt("SUM(total)");
+            }
+            dashboard_TotalI.setText("$" + ti);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void dashboardNSP(){
+        String sql = "SELECT COUNT(quantity) FROM customer";
+
+        connect = Database.connectDB();
+
+        try{
+            int q = 0;
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            if(result.next()){
+                q = result.getInt("COUNT(quantity)");
+
+            }
+            dashboard_NSP.setText(String.valueOf(q));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void dashboardIncomeChart(){
+        dashboard_incomeChart.getData().clear();
+        String sql = "SELECT date, SUM(total) FROM receipt GROUP BY date ORDER BY TIMESTAMP(date)";
+        connect = Database.connectDB();
+
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            XYChart.Series chart = new XYChart.Series();
+            while(result.next()){
+                chart.getData().add(new XYChart.Data<>(result.getString(1), result.getInt(2)));
+
+            }
+            dashboard_incomeChart.getData().add(chart);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void dashboardCustomerChart(){
+        dashboard_customerChart.getData().clear();
+        String sql = "SELECT date, COUNT(id) FROM receipt GROUP BY date ORDER BY TIMESTAMP(date)";
+        connect = Database.connectDB();
+
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            XYChart.Series chart = new XYChart.Series();
+            while(result.next()){
+                chart.getData().add(new XYChart.Data<>(result.getString(1), result.getInt(2)));
+
+            }
+            dashboard_customerChart.getData().add(chart);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void inventoryAddBtn(){
         if(inventory_productID.getText().isEmpty()
@@ -555,6 +722,7 @@ public class MainInterfaceController implements Initializable {
             {
                 totalP = result.getInt("SUM(price)");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -567,37 +735,31 @@ public class MainInterfaceController implements Initializable {
         menu_total.setText(totalP + " VNĐ");
     }
 
-    private int amount, change;
+    private int amount, change = 0;
     public void menuAmount()
     {
         menuGetTotal();
-        if (menu_amount.getText().isEmpty() || totalP == 0)
+        if (menu_amount.getText().isEmpty())
         {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
-            alert.setContentText("INVALID!");
+            alert.setContentText("Amount is empty");
             alert.showAndWait();
             menu_change.setText("");
         }
         else{
             amount = Integer.parseInt(menu_amount.getText());
             change = amount - totalP;
-            if (amount < totalP)
-            {
-                menu_change.setText(change + " VNĐ");
-            }
-            else{
-                menu_change.setText(change + " VNĐ");
-            }
+            menu_change.setText(change + " VNĐ");
         }
     }
 
+    public boolean checkPrintReceipt = true, checkPay = false;
     public void menuPayBtn()
     {
         customerID();
         menuAmount();
-        System.out.println(totalP);
         if (totalP == 0)
         {
             alert = new Alert(Alert.AlertType.ERROR);
@@ -606,6 +768,9 @@ public class MainInterfaceController implements Initializable {
             alert.setContentText("Please choose product");
             alert.showAndWait();
             menu_change.setText("");
+        }
+        else if (menu_amount.getText().isEmpty())
+        {
         }
         else{
             String insertPay = "INSERT INTO receipt (customer_id, total, date, em_username)"
@@ -621,19 +786,19 @@ public class MainInterfaceController implements Initializable {
                 Optional<ButtonType> option = alert.showAndWait();
 
                 if (option.get().equals(ButtonType.OK)) {
-                    System.out.println(change < 0);
+
                     prepare = connect.prepareStatement(insertPay);
 
+                    change = amount - totalP;
                     if (change < 0) {
-                        System.out.println(change);
                         alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Error Message");
                         alert.setHeaderText(null);
                         alert.setContentText("Don't enough money to pay");
                         alert.showAndWait();
-                        menu_change.setText("");
+
                     } else {
-                        System.out.println(change);
+
                         prepare.setString(1, String.valueOf(cID));
                         prepare.setString(2, String.valueOf(totalP));
                         Date date = new Date();
@@ -643,17 +808,15 @@ public class MainInterfaceController implements Initializable {
 
                         prepare.executeUpdate();
 
-                        alert = new Alert((Alert.AlertType.CONFIRMATION));
-                        alert.setTitle("Confirmation Message");
+                        alert = new Alert((AlertType.INFORMATION));
+                        alert.setTitle("Information Message");
                         alert.setHeaderText(null);
                         alert.setContentText("Pay successfully");
-                        alert.setContentText("Grocery5 thanks you very much!!!");
                         alert.showAndWait();
-                        menuShowOrderData();
-
-                        menu_total.setText(0 + " VNĐ");
-                        menu_amount.setText("");
-                        menu_change.setText(0 + " VNĐ");
+                        alert.setContentText("Remember print receipt for customer before paying others");
+                        alert.showAndWait();
+                        checkPay = true;
+                        checkPrintReceipt = false;
                     }
                 }
                     else{
@@ -746,14 +909,8 @@ public class MainInterfaceController implements Initializable {
                 checkID = result.getInt("MAX(customer_id)");
             }
 
-            if (cID == 0)
-            {
-                cID += 1;
-            }
-            else if (cID == checkID)
-            {
-                cID += 1;
-            }
+            if (cID == 0 || cID == checkID)
+                cID++;
 
             data.cID = cID;
         } catch (Exception e) {
@@ -794,6 +951,91 @@ public class MainInterfaceController implements Initializable {
         menu_amount.setText("");
         menu_change.setText("0");
     }
+
+    public void menuReceiptBtn(){
+        if(totalP == 0 || menu_amount.getText().isEmpty()){
+            alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please order first");
+            alert.showAndWait();
+        }
+        else if (checkPay == false)
+        {
+            alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Warning Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please paying before printing receipt");
+            alert.showAndWait();
+        }
+        else {
+
+            HashMap map = new HashMap();
+            map.put("getReceipt", (cID));
+
+            try {
+
+                JasperReport jReport = JasperCompileManager.compileReport("D:\\GitHub\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
+                JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
+
+                JasperViewer.viewReport(jPrint, false);
+
+                menuRestart();
+                menuShowOrderData();
+                checkPrintReceipt = true;
+                checkPay = false;
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean isCheckPrintReceipt(){
+        boolean res = true;
+        if (checkPrintReceipt == false) {
+            res = false;
+        }
+        return res;
+    }
+
+    public ObservableList<customerData> customersDataList(){
+
+        ObservableList<customerData> listData = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM receipt";
+        connect = Database.connectDB();
+
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            customerData cData;
+
+            while(result.next()){
+                cData = new customerData(result.getInt("id"), result.getInt("customer_id"),
+                        result.getInt("total"), result.getDate("date"),
+                        result.getString("em_username"));
+                listData.add(cData);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listData;
+    }
+
+    private ObservableList<customerData> customersListData;
+    public void customersShowData(){
+        customersListData = customersDataList();
+
+        customers_col_customerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customers_col_total.setCellValueFactory(new PropertyValueFactory<>("total"));
+        customers_col_date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        customers_col_cashier.setCellValueFactory(new PropertyValueFactory<>("emUsername"));
+
+        customers_tableView.setItems(customersListData);
+
+    }
+
+
     public void switchForm(ActionEvent event)
     {
         if (event.getSource() == dashboard_btn)
@@ -801,12 +1043,22 @@ public class MainInterfaceController implements Initializable {
             dashboard_form.setVisible(true);
             inventory_form.setVisible(false);
             menu_form.setVisible(false);
+            customers_form.setVisible(false);
+
+            dashboardDisplayNC();
+            dashboardDisplayTI();
+            dashboardTotalI();
+            dashboardNSP();
+            dashboardIncomeChart();
+            dashboardCustomerChart();
+
         }
         else if (event.getSource() == inventory_btn)
         {
             dashboard_form.setVisible(false);
             inventory_form.setVisible(true);
             menu_form.setVisible(false);
+            customers_form.setVisible(false);
 
             inventoryTypeList();
             inventoryStatusList();
@@ -817,43 +1069,35 @@ public class MainInterfaceController implements Initializable {
             dashboard_form.setVisible(false);
             inventory_form.setVisible(false);
             menu_form.setVisible(true);
+            customers_form.setVisible(false);
 
             menuDisplayCard();
             menuGetOrder();
             menuShowTotal();
             menuShowOrderData();
         }
-    }
-    public void menuReceiptBtn(){
-        if(totalP == 0 || menu_amount.getText().isEmpty()){
-            alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error Message");
-            alert.setContentText("Please order first");
-            alert.showAndWait();
-        }
-        else {
+        else if(event.getSource() == customers_btn){
+            dashboard_form.setVisible(false);
+            inventory_form.setVisible(false);
+            menu_form.setVisible(false);
+            customers_form.setVisible(true);
 
-            HashMap map = new HashMap();
-            map.put("getReceipt", (cID - 1));
-
-            try {
-
-                JasperReport jReport = JasperCompileManager.compileReport("D:\\GitHub\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
-                JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
-
-                JasperViewer.viewReport(jPrint, false);
-
-              menuRestart();
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+            customersShowData();
         }
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         displayUsername();
+
+        dashboardDisplayNC();
+        dashboardDisplayTI();
+        dashboardTotalI();
+        dashboardNSP();
+        dashboardIncomeChart();
+        dashboardCustomerChart();
+
         inventoryTypeList();
         inventoryStatusList();
         inventoryShowData();
@@ -862,5 +1106,7 @@ public class MainInterfaceController implements Initializable {
         menuGetOrder();
         menuShowTotal();
         menuShowOrderData();
+
+        customersShowData();
     }
 }

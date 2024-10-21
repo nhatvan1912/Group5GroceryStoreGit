@@ -83,9 +83,8 @@ public class cardProductController implements Initializable {
         this.mainController = mainController;
     }
 
-    public void addBtn()
-    {
-        mainController.customerID();
+    public void addBtn() {
+
 
         qty = prod_spinner.getValue();
         String check = "";
@@ -93,109 +92,112 @@ public class cardProductController implements Initializable {
 
         connect = Database.connectDB();
 
-        try{
-            int checkStck = 0;
-            String checkStock = "SELECT stock FROM product WHERE prod_id = '"
-                    + prodID + "'";
-            prepare = connect.prepareStatement(checkStock);
-            result = prepare.executeQuery();
-
-            if (result.next())
-            {
-                checkStck = result.getInt("stock");
-            }
-
-            if (checkStck == 0)
-            {
-                String  updateStock =  "UPDATE product SET prod_name = '"
-                        + prod_name.getText() + "', type = '"
-                        + type + "', stock = 0, price = "
-                        + pr + ", status = 'Unavailable', image = '"
-                        + prod_image + "', date = '"
-                        + prod_date + "' WHERE prod_id = '"
+        if (!mainController.isCheckPrintReceipt()) {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Printing receipt before adding new product");
+            alert.showAndWait();
+            spin.setValue(0);
+        }
+        else {
+            mainController.customerID();
+            try {
+                int checkStck = 0;
+                String checkStock = "SELECT stock FROM product WHERE prod_id = '"
                         + prodID + "'";
-
-                prepare = connect.prepareStatement(updateStock);
-                prepare.executeUpdate();
-            }
-
-            prepare = connect.prepareStatement(checkAvailable);
-            result = prepare.executeQuery();
-
-            if (result.next())
-            {
-                check = result.getString("status");
-            }
-
-            if (check.equals("Unavailable") || qty == 0)
-            {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Something Wrong");
-                alert.showAndWait();
-            }
-            else{
-                checkStck = 0;
                 prepare = connect.prepareStatement(checkStock);
                 result = prepare.executeQuery();
-                if (result.next())
-                {
+
+                if (result.next()) {
                     checkStck = result.getInt("stock");
                 }
-                if (checkStck < qty)
-                {
-                    alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Invalid. This product is Out of stock");
-                    alert.showAndWait();
-                }
-                else {
-                    String insertData = "INSERT INTO customer "
-                            + "(customer_id, prod_name, quantity, price, date, em_username)"
-                            + "VALUES(?, ?, ?, ?, ?, ?)";
-                    prepare = connect.prepareStatement(insertData);
-                    prepare.setString(1, String.valueOf(data.cID));
-                    prepare.setString(2, prod_name.getText());
-                    prepare.setString(3, String.valueOf(qty));
-                    totalP = (qty * pr);
-                    prepare.setString(4, String.valueOf(totalP));
-                    Date date = new Date();
-                    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-                    prepare.setString(5, String.valueOf(sqlDate));
-                    prepare.setString(6, data.username);
-                    prepare.executeUpdate();
 
-                    int upStock = checkStck - qty;
-
-                    prod_image = prod_image.replace("\\", "\\\\");
-
+                if (checkStck == 0) {
                     String updateStock = "UPDATE product SET prod_name = '"
                             + prod_name.getText() + "', type = '"
-                            + type + "', stock = "
-                            + upStock + ", price = "
-                            + pr + ", status = '"
-                            + check + "', image = '"
+                            + type + "', stock = 0, price = "
+                            + pr + ", status = 'Unavailable', image = '"
                             + prod_image + "', date = '"
                             + prod_date + "' WHERE prod_id = '"
                             + prodID + "'";
 
                     prepare = connect.prepareStatement(updateStock);
                     prepare.executeUpdate();
-                    
-                    alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Information Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Successfully Added!");
-                    alert.showAndWait();
-                    spin.setValue(0);
-                    mainController.menuShowTotal();
-                    mainController.menuShowOrderData();
                 }
+
+                prepare = connect.prepareStatement(checkAvailable);
+                result = prepare.executeQuery();
+
+                if (result.next()) {
+                    check = result.getString("status");
+                }
+
+                if (check.equals("Unavailable") || qty == 0) {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Something Wrong");
+                    alert.showAndWait();
+                } else {
+                    checkStck = 0;
+                    prepare = connect.prepareStatement(checkStock);
+                    result = prepare.executeQuery();
+                    if (result.next()) {
+                        checkStck = result.getInt("stock");
+                    }
+                    if (checkStck < qty) {
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Invalid. This product is Out of stock");
+                        alert.showAndWait();
+                    } else {
+                        String insertData = "INSERT INTO customer "
+                                + "(customer_id, prod_name, quantity, price, date, em_username)"
+                                + "VALUES(?, ?, ?, ?, ?, ?)";
+                        prepare = connect.prepareStatement(insertData);
+                        prepare.setString(1, String.valueOf(data.cID));
+                        prepare.setString(2, prod_name.getText());
+                        prepare.setString(3, String.valueOf(qty));
+                        totalP = (qty * pr);
+                        prepare.setString(4, String.valueOf(totalP));
+                        Date date = new Date();
+                        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                        prepare.setString(5, String.valueOf(sqlDate));
+                        prepare.setString(6, data.username);
+                        prepare.executeUpdate();
+
+                        int upStock = checkStck - qty;
+
+                        prod_image = prod_image.replace("\\", "\\\\");
+
+                        String updateStock = "UPDATE product SET prod_name = '"
+                                + prod_name.getText() + "', type = '"
+                                + type + "', stock = "
+                                + upStock + ", price = "
+                                + pr + ", status = '"
+                                + check + "', image = '"
+                                + prod_image + "', date = '"
+                                + prod_date + "' WHERE prod_id = '"
+                                + prodID + "'";
+
+                        prepare = connect.prepareStatement(updateStock);
+                        prepare.executeUpdate();
+
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Successfully Added!");
+                        alert.showAndWait();
+                        spin.setValue(0);
+                        mainController.menuShowTotal();
+                        mainController.menuShowOrderData();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
