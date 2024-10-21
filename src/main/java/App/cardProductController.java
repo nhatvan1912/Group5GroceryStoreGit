@@ -193,7 +193,7 @@ public class cardProductController implements Initializable {
 
                     prepare = connect.prepareStatement(updateStock);
                     prepare.executeUpdate();
-
+                    
                     alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Information Message");
                     alert.setHeaderText(null);
