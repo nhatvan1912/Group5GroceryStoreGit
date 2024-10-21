@@ -470,7 +470,7 @@ public class MainInterfaceController implements Initializable {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
-            alert.setContentText("Please select product you want to update!");
+            alert.setContentText("Please select product you want to delete!");
             alert.showAndWait();
         }else {
             String deleteData = "delete from product where id = " + id;
@@ -525,7 +525,8 @@ public class MainInterfaceController implements Initializable {
         inventory_price.setText(String.valueOf(prodData.getPrice()));
         inventory_type.getSelectionModel().select(prodData.getType());
         inventory_status.getSelectionModel().select(prodData.getStatus());
-        String pathTemp = "File:" + prodData.getImage();
+        String pathTemp = prodData.getImage();
+        path = pathTemp.replace("\\\\","\\");
         date = String.valueOf(prodData.getDate());
         id = prodData.getId();
         image = new Image(pathTemp, 130, 140, true, true);
