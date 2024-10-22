@@ -62,7 +62,7 @@ public class cardProductController implements Initializable {
         prod_name.setText(prodData.getProductName());
         prod_price.setText(String.valueOf(prodData.getPrice()) + " VNĐ");
         String path = "File:" + prodData.getImage();
-        image = new Image(path, 190, 94, false, true);
+        image = new Image(path, 190, 110, false, true);
         prod_imagineView.setImage(image);
         pr = prodData.getPrice();
     }
@@ -101,7 +101,7 @@ public class cardProductController implements Initializable {
             spin.setValue(0);
         }
         else {
-            mainController.customerID();
+//            mainController.customerID();
             try {
                 int checkStck = 0;
                 String checkStock = "SELECT stock FROM product WHERE prod_id = '"

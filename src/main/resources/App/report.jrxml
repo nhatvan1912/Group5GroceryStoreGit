@@ -2,8 +2,11 @@
 <!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="226" pageHeight="425" columnWidth="186" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a6bc4ebc-5754-4bbe-b3e9-039b84e992a0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="listAcount"/>
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<parameter name="getReceipt" class="java.lang.String"/>
+	<property name="com.jaspersoft.studio.data.sql.tables">
+		<![CDATA[cmVjZWlwdCAsMjE1LDEwOCw1ZTA4YTM4Zi01OTdmLTRjOWQtOTgzOC1mMzM2NDY3YmZlZmE7Y3Vz
+dG9tZXIgLDUzLDEwOCw4MTcyNzg0NS0xZDAyLTRhOGMtODY4OS1mZjBkMDU3OThlODg7]]>
+	</property>
+	<parameter name="getReceipt" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT *
 FROM customer

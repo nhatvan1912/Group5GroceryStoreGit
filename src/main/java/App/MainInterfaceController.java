@@ -656,13 +656,13 @@ public class MainInterfaceController implements Initializable {
                 cardC.setMainController(this);
                 cardC.setData(cardListData.get(q));
 
-                if (column == 3){
+                if (column == 4){
                     column = 0;
                     row += 1;
                 }
 
                 menu_gridPane.add(pane, column++, row);
-                GridPane.setMargin(pane, new Insets(10));
+                GridPane.setMargin(pane, new Insets(7.7));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -709,7 +709,7 @@ public class MainInterfaceController implements Initializable {
 
     private int totalP;
     public void menuGetTotal(){
-        customerID();
+//        customerID();
         String total = "SELECT SUM(price) FROM customer WHERE customer_id = '"
                 + cID + "'";
 
@@ -732,14 +732,13 @@ public class MainInterfaceController implements Initializable {
     public void menuShowTotal()
     {
         menuGetTotal();
-        System.out.println(totalP);
         menu_total.setText(totalP + " VNĐ");
     }
 
     private int amount, change = 0;
     public void menuAmount()
     {
-        menuGetTotal();
+//        menuGetTotal();
         if (menu_amount.getText().isEmpty())
         {
             alert = new Alert(Alert.AlertType.ERROR);
@@ -759,67 +758,73 @@ public class MainInterfaceController implements Initializable {
     public boolean checkPrintReceipt = true, checkPay = false;
     public void menuPayBtn()
     {
-        customerID();
-        menuAmount();
-        if (totalP == 0)
+        if (checkPay)
         {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Message");
             alert.setHeaderText(null);
-            alert.setContentText("Please choose product");
+            alert.setContentText("Please print receipt before paying others");
             alert.showAndWait();
-            menu_change.setText("");
         }
-        else if (menu_amount.getText().isEmpty())
-        {
-        }
-        else{
-            String insertPay = "INSERT INTO receipt (customer_id, total, date, em_username)"
-                    + "VALUES( ?, ?, ?, ?)";
-
-            connect = Database.connectDB();
-
-            try {
-                alert = new Alert((Alert.AlertType.CONFIRMATION));
-                alert.setTitle("Confirmation Message");
+        else {
+            menuAmount();
+            if (totalP == 0)
+            {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Message");
                 alert.setHeaderText(null);
-                alert.setContentText("Are your sure?");
-                Optional<ButtonType> option = alert.showAndWait();
+                alert.setContentText("Please choose product");
+                alert.showAndWait();
+                menu_change.setText("");
+            }
+            else if (!menu_amount.getText().isEmpty())
+            {
+                String insertPay = "INSERT INTO receipt (customer_id, total, date, em_username)"
+                        + "VALUES( ?, ?, ?, ?)";
 
-                if (option.get().equals(ButtonType.OK)) {
+                connect = Database.connectDB();
 
-                    prepare = connect.prepareStatement(insertPay);
+                try {
+                    alert = new Alert((Alert.AlertType.CONFIRMATION));
+                    alert.setTitle("Confirmation Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Are your sure?");
+                    Optional<ButtonType> option = alert.showAndWait();
 
-                    change = amount - totalP;
-                    if (change < 0) {
-                        alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Error Message");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Don't enough money to pay");
-                        alert.showAndWait();
+                    if (option.get().equals(ButtonType.OK)) {
 
-                    } else {
+                        prepare = connect.prepareStatement(insertPay);
 
-                        prepare.setString(1, String.valueOf(cID));
-                        prepare.setString(2, String.valueOf(totalP));
-                        Date date = new Date();
-                        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-                        prepare.setString(3, String.valueOf(sqlDate));
-                        prepare.setString(4, data.username);
+                        change = amount - totalP;
+                        if (change < 0) {
+                            alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error Message");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Don't enough money to pay");
+                            alert.showAndWait();
 
-                        prepare.executeUpdate();
+                        } else {
 
-                        alert = new Alert((AlertType.INFORMATION));
-                        alert.setTitle("Information Message");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Pay successfully");
-                        alert.showAndWait();
-                        alert.setContentText("Remember print receipt for customer before paying others");
-                        alert.showAndWait();
-                        checkPay = true;
-                        checkPrintReceipt = false;
+                            prepare.setString(1, String.valueOf(cID));
+                            prepare.setString(2, String.valueOf(totalP));
+                            Date date = new Date();
+                            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                            prepare.setString(3, String.valueOf(sqlDate));
+                            prepare.setString(4, data.username);
+
+                            prepare.executeUpdate();
+
+                            alert = new Alert((AlertType.INFORMATION));
+                            alert.setTitle("Information Message");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Pay successfully");
+                            alert.showAndWait();
+                            alert.setContentText("Remember print receipt for customer before paying others");
+                            alert.showAndWait();
+                            checkPay = true;
+                            checkPrintReceipt = false;
+                        }
                     }
-                }
                     else{
                         alert = new Alert(Alert.AlertType.WARNING);
                         alert.setTitle("Information Message");
@@ -827,9 +832,10 @@ public class MainInterfaceController implements Initializable {
                         alert.setContentText("Cancelled");
                         alert.showAndWait();
                     }
-            }
-            catch (SQLException e) {
-                throw new RuntimeException(e);
+                }
+                catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -948,9 +954,9 @@ public class MainInterfaceController implements Initializable {
         totalP = 0;
         change = 0;
         amount = 0;
-        menu_total.setText("0");
+        menu_total.setText(0 + " VNĐ");
         menu_amount.setText("");
-        menu_change.setText("0");
+        menu_change.setText(0 + " VNĐ");
     }
 
     public void menuReceiptBtn(){
@@ -963,8 +969,8 @@ public class MainInterfaceController implements Initializable {
         }
         else if (checkPay == false)
         {
-            alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Warning Message");
+            alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
             alert.setHeaderText(null);
             alert.setContentText("Please paying before printing receipt");
             alert.showAndWait();
@@ -1073,7 +1079,6 @@ public class MainInterfaceController implements Initializable {
             customers_form.setVisible(false);
 
             menuDisplayCard();
-            menuGetOrder();
             menuShowTotal();
             menuShowOrderData();
         }
@@ -1104,7 +1109,6 @@ public class MainInterfaceController implements Initializable {
         inventoryShowData();
 
         menuDisplayCard();
-        menuGetOrder();
         menuShowTotal();
         menuShowOrderData();
 
