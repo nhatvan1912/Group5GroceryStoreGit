@@ -541,11 +541,6 @@ public class MainInterfaceController implements Initializable {
         inventory_imageView.setImage(image);
     }
 
-
-
-
-
-
     public ObservableList<productData> inventoryDataList(){
         ObservableList<productData> listData = FXCollections.observableArrayList();
         String table = "select * from product";
@@ -584,7 +579,7 @@ public class MainInterfaceController implements Initializable {
         inventory_table.setItems(inventoryListData);
     }
 
-    private String[] TypeList = {"Vegetable", "Beverages", "Food", "Seafood", "Meat",
+    private String[] TypeList = {"Vegetable", "Beverages", "Fast food", "Seafood", "Meat",
     "Consumer Goods", "Personal Care"};
     public void inventoryTypeList(){
         List<String> typeList = new ArrayList<>();
@@ -662,7 +657,7 @@ public class MainInterfaceController implements Initializable {
                 }
 
                 menu_gridPane.add(pane, column++, row);
-                GridPane.setMargin(pane, new Insets(7.7));
+                GridPane.setMargin(pane, new Insets(8));
             } catch (Exception e) {
                 e.printStackTrace();
             }
