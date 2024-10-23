@@ -57,7 +57,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="inventory_btn" layoutX="5.0" layoutY="267.0" minHeight="40.0" minWidth="210.0" mnemonicParsing="false" onAction="#switchForm" styleClass="nav_btn" stylesheets="@mainInterfaceDesign.css" text="Inventory" textFill="WHITE">
+                              <Button fx:id="inventory_btn" disable="true" layoutX="5.0" layoutY="267.0" minHeight="40.0" minWidth="210.0" mnemonicParsing="false" onAction="#switchForm" styleClass="nav_btn" stylesheets="@mainInterfaceDesign.css" text="Inventory" textFill="WHITE">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
@@ -82,6 +82,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
+                              <FontAwesomeIcon fx:id="inventory_lockIcon" fill="#ffffffab" glyphName="LOCK" layoutX="188.0" layoutY="297.0" size="2em" />
                            </children>
                         </AnchorPane>
                      </children>

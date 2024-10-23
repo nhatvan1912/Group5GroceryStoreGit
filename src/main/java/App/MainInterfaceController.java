@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.* ;
 import java.util.Date;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -205,6 +206,9 @@ public class MainInterfaceController implements Initializable {
 
     @FXML
     private AreaChart<?, ?> dashboard_incomeChart;
+
+    @FXML
+    private FontAwesomeIcon inventory_lockIcon;
 
 
     public static String username;
@@ -944,6 +948,26 @@ public class MainInterfaceController implements Initializable {
         String user = username;
         user = user.substring(0,1).toUpperCase() + user.substring(1);
         main_username.setText(user);
+        connect = Database.connectDB();
+        String checkManager = "select manager from employee where username = '" + username + "'";
+        try{
+            prepare = connect.prepareStatement(checkManager);
+            result = prepare.executeQuery();
+            int isManager=0;
+            if(result.next())
+            {
+                isManager=result.getInt("manager");
+                if(isManager==1)
+                {
+                    inventory_lockIcon.setVisible(false);
+                    inventory_btn.setDisable(false);
+                }
+                else{
+                    inventory_lockIcon.setVisible(true);
+                    inventory_btn.setDisable(true);
+                }
+            }
+        } catch (SQLException e){e.printStackTrace();}
     }
     public void menuRestart(){
         totalP = 0;
@@ -977,7 +1001,7 @@ public class MainInterfaceController implements Initializable {
 
             try {
 
-                JasperReport jReport = JasperCompileManager.compileReport("D:\\GitHub\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
+                JasperReport jReport = JasperCompileManager.compileReport("D:\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
                 JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
 
                 JasperViewer.viewReport(jPrint, false);
