@@ -206,6 +206,41 @@ public class MainInterfaceController implements Initializable {
     @FXML
     private AreaChart<?, ?> dashboard_incomeChart;
 
+    @FXML
+    private Button em_btn_delete;
+
+    @FXML
+    private Button em_btn_open;
+
+    @FXML
+    private TableView<employeeData> em_tableView;
+
+    @FXML
+    private TableColumn<employeeData, String> col_employee_answer;
+
+    @FXML
+    private TableColumn<employeeData, Date> col_employee_date;
+
+    @FXML
+    private TableColumn<employeeData, Integer> col_employee_manager;
+
+    @FXML
+    private TableColumn<employeeData, String> col_employee_password;
+
+    @FXML
+    private TableColumn<employeeData, String> col_employee_question;
+
+    @FXML
+    private TableColumn<employeeData, Integer> col_employee_total;
+
+    @FXML
+    private TableColumn<employeeData, String> col_employee_username;
+
+    @FXML
+    private Button employee_btn;
+
+    @FXML
+    private AnchorPane employee_form;
 
     public static String username;
     public static String path = "";
@@ -775,7 +810,7 @@ public class MainInterfaceController implements Initializable {
             else if (!menu_amount.getText().isEmpty())
             {
                 String insertPay = "INSERT INTO receipt (customer_id, total, date, em_username)"
-                        + "VALUES( ?, ?, ?, ?)";
+                        + "VALUES(?, ?, ?, ?)";
 
                 connect = Database.connectDB();
 
@@ -910,7 +945,6 @@ public class MainInterfaceController implements Initializable {
             {
                 checkID = result.getInt("MAX(customer_id)");
             }
-
             if (cID == 0 || cID == checkID)
                 cID++;
 
@@ -1034,9 +1068,267 @@ public class MainInterfaceController implements Initializable {
         customers_col_cashier.setCellValueFactory(new PropertyValueFactory<>("emUsername"));
 
         customers_tableView.setItems(customersListData);
+    }
+    private String employeeSelected = "";
+    public ObservableList<employeeData> employeeListData()
+    {
+        ObservableList<employeeData> listData = FXCollections.observableArrayList();
+        String sql = "SELECT e.*, SUM(r.total) AS total " +
+                "FROM employee e " +
+                "LEFT JOIN receipt r ON e.username = r.em_username " +
+                "GROUP BY e.username";
 
+        connect = Database.connectDB();
+
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            employeeData eData;
+
+            while(result.next()){
+                eData = new employeeData(result.getInt("id"), result.getString("username"),
+                        result.getString("password"), result.getString("question"),
+                        result.getString("answer"), result.getDate("date"),
+                        result.getInt("manager"), result.getInt("total"));
+                listData.add(eData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listData;
     }
 
+    private ObservableList<employeeData> employeeDataList;
+    public void employeeShowData(){
+        employeeDataList = employeeListData();
+
+        col_employee_username.setCellValueFactory(new PropertyValueFactory<>("username"));
+        col_employee_password.setCellValueFactory(new PropertyValueFactory<>("password"));
+        col_employee_question.setCellValueFactory(new PropertyValueFactory<>("question"));
+        col_employee_answer.setCellValueFactory(new PropertyValueFactory<>("answer"));
+        col_employee_date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        col_employee_manager.setCellValueFactory(new PropertyValueFactory<>("manager"));
+        col_employee_total.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+        customerHideInformation(col_employee_password);
+        customerHideInformation(col_employee_question);
+        customerHideInformation(col_employee_answer);
+
+        em_tableView.setItems(employeeDataList);
+    }
+
+    private int getEmployeeID = 0;
+    private int employeeManager = -1;
+    public void employeeSelect()
+    {
+        employeeData emp = em_tableView.getSelectionModel().getSelectedItem();
+        int num = em_tableView.getSelectionModel().getSelectedIndex();
+
+        if ((num -1) < -1) return;
+
+        employeeSelected = emp.getUsername();
+        employeeManager = emp.getManager();
+        getEmployeeID = emp.getId();
+    }
+
+    private void customerHideInformation(TableColumn<employeeData, String> col)
+    {
+        col.setCellFactory(column -> new TableCell<employeeData, String>(){
+            @Override
+            protected void updateItem(String value, boolean empty) {
+                super.updateItem(value, empty);
+
+                if (empty || value == null)
+                    setText(null);
+                else{
+                    setText("*********");
+                }
+            }
+        });
+    }
+
+    private void customerShowInformation(TableColumn<employeeData, String> tableCell)
+    {
+        tableCell.setCellFactory(column -> new TableCell<employeeData, String>(){
+            @Override
+            protected void updateItem(String value, boolean empty) {
+                super.updateItem(value, empty);
+
+                if (empty || value == null)
+                    setText(null);
+                else{
+                    employeeData selectedEmployee = em_tableView.getSelectionModel().getSelectedItem();
+                    employeeData currentEmployee = getTableView().getItems().get(getIndex());
+
+                    if (selectedEmployee != null && selectedEmployee.equals(currentEmployee))
+                        setText(value);
+                    else{
+                        setText("*********");
+                    }
+                }
+            }
+        });
+    }
+
+    public void customerOpenBtn()
+    {
+        employeeSelect();
+        if (getEmployeeID == 0)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select the employee you want to open");
+            alert.showAndWait();
+        }
+        else {
+
+            String sql = "INSERT INTO delete_log(username, delete_by, open_by, date) VALUES(?, ?, ?, ?)";
+            connect = Database.connectDB();
+
+            try{
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you want to open this employee");
+                Optional<ButtonType> option = alert.showAndWait();
+
+                if (option.get().equals(ButtonType.OK)) {
+
+                    prepare = connect.prepareStatement(sql);
+
+                    prepare.setString(1, employeeSelected);
+                    prepare.setString(2, null);
+                    prepare.setString(3, data.username);
+                    Date date = new Date();
+                    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                    prepare.setString(4, String.valueOf(sqlDate));
+
+                    prepare.executeUpdate();
+
+                    customerShowInformation(col_employee_password);
+                    customerShowInformation(col_employee_question);
+                    customerShowInformation(col_employee_answer);
+
+                }
+                else{
+                    alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Cancelled");
+                    alert.showAndWait();
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void customerDeleleBtn()
+    {
+        employeeSelect();
+        if (getEmployeeID == 0)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select the employee you want to open");
+            alert.showAndWait();
+        }
+        else if (em_tableView.getItems().size() == 1)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("You don't delete because there is only one account left");
+            alert.showAndWait();
+        }
+        else if (employeeManager == 1 && !data.username.equals(employeeSelected))
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("You can't delete this account");
+            alert.showAndWait();
+        }
+        else{
+            String sql = "DELETE FROM employee WHERE id = '" + getEmployeeID + "'";
+            connect = Database.connectDB();
+
+            try {
+                Optional<ButtonType> option;
+                if (data.username.equals(employeeSelected))
+                {
+                    alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("You want to delete yourself");
+                    option = alert.showAndWait();
+                }
+                else {
+                    alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Are you sure");
+                    option = alert.showAndWait();
+                }
+
+                if (option.get().equals(ButtonType.OK)) {
+                    prepare = connect.prepareStatement(sql);
+                    prepare.executeUpdate();
+                    employeeShowData();
+
+                    String insertData = "INSERT INTO delete_log(username, delete_by, open_by, date) VALUES(?, ?, ?, ?)";
+
+                    connect = Database.connectDB();
+                    try{
+                        prepare = connect.prepareStatement(insertData);
+                        prepare.setString(1, employeeSelected);
+                        prepare.setString(2, data.username);
+                        prepare.setString(3, null);
+                        Date date = new Date();
+                        java.sql.Date sqlDate = new java.sql.Date((date.getTime()));
+                        prepare.setString(4, String.valueOf(sqlDate));
+
+                        prepare.executeUpdate();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (data.username.equals(employeeSelected))
+                        logoutFromEmployee();
+                }
+                else{
+                    alert = new Alert(AlertType.WARNING);
+                    alert.setTitle("Warning Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Cancelled");
+                    alert.showAndWait();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void logoutFromEmployee(){
+        try{
+            alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Information Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Goodbye. Best wishes!");
+            Optional<ButtonType> result = alert.showAndWait();
+            logout_btn.getScene().getWindow().hide();
+            Parent root = FXMLLoader.load(getClass().getResource("loginGUI.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Group 5 Grocery Store");
+            stage.setMinHeight(450);
+            stage.setMaxHeight(670);
+            stage.show();
+        }catch(Exception e){e.printStackTrace();}
+    }
 
     public void switchForm(ActionEvent event)
     {
@@ -1046,6 +1338,7 @@ public class MainInterfaceController implements Initializable {
             inventory_form.setVisible(false);
             menu_form.setVisible(false);
             customers_form.setVisible(false);
+            employee_form.setVisible(false);
 
             dashboardDisplayNC();
             dashboardDisplayTI();
@@ -1061,6 +1354,7 @@ public class MainInterfaceController implements Initializable {
             inventory_form.setVisible(true);
             menu_form.setVisible(false);
             customers_form.setVisible(false);
+            employee_form.setVisible(false);
 
             inventoryTypeList();
             inventoryStatusList();
@@ -1072,6 +1366,7 @@ public class MainInterfaceController implements Initializable {
             inventory_form.setVisible(false);
             menu_form.setVisible(true);
             customers_form.setVisible(false);
+            employee_form.setVisible(false);
 
             menuDisplayCard();
             menuShowTotal();
@@ -1082,9 +1377,21 @@ public class MainInterfaceController implements Initializable {
             inventory_form.setVisible(false);
             menu_form.setVisible(false);
             customers_form.setVisible(true);
+            employee_form.setVisible(false);
 
             customersShowData();
         }
+        else if (event.getSource() == employee_btn)
+        {
+            dashboard_form.setVisible(false);
+            inventory_form.setVisible(false);
+            menu_form.setVisible(false);
+            customers_form.setVisible(false);
+            employee_form.setVisible(true);
+
+            employeeShowData();
+        }
+
     }
 
 
@@ -1108,5 +1415,7 @@ public class MainInterfaceController implements Initializable {
         menuShowOrderData();
 
         customersShowData();
+
+        employeeShowData();
     }
 }
