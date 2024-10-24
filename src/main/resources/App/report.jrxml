@@ -118,7 +118,7 @@ WHERE
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Comic Sans MS" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nam's Store]]></text>
+				<text><![CDATA[Group 5 Grocery Store]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="80" y="0" width="60" height="14" uuid="10045731-eb43-4e51-a376-3644ae2dbcda"/>
