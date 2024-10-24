@@ -14,5 +14,5 @@
 }
 
 .btn:hover{
-    -fx-background-color: linear-gradient(to bottom right, #0fb565, #399a8f);
+    -fx-background-color: linear-gradient(to bottom right, #f51616, #ecfc16);
 }

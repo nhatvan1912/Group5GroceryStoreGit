@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.* ;
 import java.util.Date;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -242,6 +243,12 @@ public class MainInterfaceController implements Initializable {
     @FXML
     private AnchorPane employee_form;
 
+    @FXML
+    private FontAwesomeIcon lockEmployeeIcon;
+
+    @FXML
+    private FontAwesomeIcon lockInventoryIcon;
+
     public static String username;
     public static String path = "";
     public static String date;
@@ -292,7 +299,7 @@ public class MainInterfaceController implements Initializable {
             if(result.next()){
                 ti = result.getInt("SUM(total)");
             }
-            dashboard_TI.setText("$" + ti);
+            dashboard_TI.setText(ti+"đ");
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -312,7 +319,7 @@ public class MainInterfaceController implements Initializable {
             if(result.next()){
                 ti = result.getInt("SUM(total)");
             }
-            dashboard_TotalI.setText("$" + ti);
+            dashboard_TotalI.setText(ti+"đ");
 
         }catch(Exception e){
             e.printStackTrace();
@@ -614,8 +621,8 @@ public class MainInterfaceController implements Initializable {
         inventory_table.setItems(inventoryListData);
     }
 
-    private String[] TypeList = {"Vegetable", "Beverages", "Fast food", "Seafood", "Meat",
-    "Consumer Goods", "Personal Care"};
+    private String[] TypeList = {"Vegetable", "Beverages", "Fast food", "Frozen Food", "Spices",
+    "Household Goods", "Cosmetics", "Personal Care", "Dry Food", "Canned Food"};
     public void inventoryTypeList(){
         List<String> typeList = new ArrayList<>();
         Collections.addAll(typeList, TypeList);
@@ -629,6 +636,95 @@ public class MainInterfaceController implements Initializable {
         Collections.addAll(statusList, StatusList);
         ObservableList listData = FXCollections.observableArrayList(statusList);
         inventory_status.setItems(listData);
+    }
+    public String sqlMenuChoose;
+
+    public void MenuAllBtn()
+    {
+        menuDisplayCard(true);
+    }
+    public void MenuFastfoodBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Fast Food'";
+        menuDisplayCard(false);
+    }
+    public void MenuBeverageBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Beverages'";
+        menuDisplayCard(false);
+    }
+    public void MenuVegetableBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Vegetable'";
+        menuDisplayCard(false);
+    }
+    public void MenuFrozenFoodBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Frozen Food'";
+        menuDisplayCard(false);
+    }
+    public void MenuSpicesBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Spices'";
+        menuDisplayCard(false);
+    }
+    public void MenuHouseholdGoodsBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Household Goods'";
+        menuDisplayCard(false);
+    }
+    public void MenuCosmeticsBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Cosmetics'";
+        menuDisplayCard(false);
+    }
+    public void MenuPersonalCareBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Personal Care'";
+        menuDisplayCard(false);
+    }
+    public void MenuDryFoodBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Dry Food'";
+        menuDisplayCard(false);
+    }
+    public void MenuCannedFoodBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Canned Food'";
+        menuDisplayCard(false);
+    }
+    public ObservableList<productData> menuGetDataBtn()
+    {
+
+        String sql = sqlMenuChoose;
+
+        ObservableList<productData> listData = FXCollections.observableArrayList();
+        connect = Database.connectDB();
+
+        try {
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+
+            productData prod;
+
+            while (result.next())
+            {
+                prod = new productData(result.getInt("id"),
+                        result.getString("prod_id"),
+                        result.getString("prod_name"),
+                        result.getString("type"),
+                        result.getInt("stock"),
+                        result.getInt("price"),
+                        result.getString("image"),
+                        result.getDate("date"));
+
+                listData.add(prod);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listData;
     }
 
     public ObservableList<productData> menuGetData()
@@ -665,11 +761,13 @@ public class MainInterfaceController implements Initializable {
         return listData;
     }
 
-    public void menuDisplayCard()
+    public void menuDisplayCard(boolean IsMenu)
     {
         cardListData.clear();
-        cardListData.addAll(menuGetData());
-
+        if(IsMenu)
+            cardListData.addAll(menuGetData());
+        else
+            cardListData.addAll(menuGetDataBtn());
         int row = 0, column = 0;
 
         menu_gridPane.getChildren().clear();
@@ -686,7 +784,7 @@ public class MainInterfaceController implements Initializable {
                 cardC.setMainController(this);
                 cardC.setData(cardListData.get(q));
 
-                if (column == 4){
+                if (column == 3){
                     column = 0;
                     row += 1;
                 }
@@ -903,7 +1001,6 @@ public class MainInterfaceController implements Initializable {
                     getQuantity = result.getInt("quantity");
                 }
 
-                System.out.println(getid);
                 String stck = "SELECT stock FROM product WHERE prod_name = '" + getProdName + "'";
                 connect = Database.connectDB();
                 try {
@@ -1011,6 +1108,28 @@ public class MainInterfaceController implements Initializable {
         String user = username;
         user = user.substring(0,1).toUpperCase() + user.substring(1);
         main_username.setText(user);
+        String sqlManager = "select manager from employee where username ='"+username+"'";
+        connect = Database.connectDB();
+        int isManager = 0;
+        try{
+            prepare = connect.prepareStatement(sqlManager);
+            result = prepare.executeQuery();
+            if(result.next()){
+                isManager = result.getInt("manager");
+            }
+            if(isManager == 1){
+                lockEmployeeIcon.setVisible(false);
+                lockInventoryIcon.setVisible(false);
+                employee_btn.setDisable(false);
+                inventory_btn.setDisable(false);
+            }
+            else{
+                lockEmployeeIcon.setVisible(true);
+                lockInventoryIcon.setVisible(true);
+                employee_btn.setDisable(true);
+                inventory_btn.setDisable(true);
+            }
+        }catch(SQLException e){e.printStackTrace();}
     }
     public void menuRestart(){
         totalP = 0;
@@ -1044,7 +1163,7 @@ public class MainInterfaceController implements Initializable {
 
             try {
 
-                JasperReport jReport = JasperCompileManager.compileReport("D:\\GitHub\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
+                JasperReport jReport = JasperCompileManager.compileReport("D:\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
                 JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
 
                 JasperViewer.viewReport(jPrint, false);
@@ -1401,7 +1520,7 @@ public class MainInterfaceController implements Initializable {
             customers_form.setVisible(false);
             employee_form.setVisible(false);
 
-            menuDisplayCard();
+            menuDisplayCard(true);
             menuShowTotal();
             menuShowOrderData();
         }
@@ -1443,7 +1562,7 @@ public class MainInterfaceController implements Initializable {
         inventoryStatusList();
         inventoryShowData();
 
-        menuDisplayCard();
+        menuDisplayCard(true);
         menuShowTotal();
         menuShowOrderData();
 

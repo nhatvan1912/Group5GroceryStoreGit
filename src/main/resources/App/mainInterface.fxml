@@ -2,6 +2,7 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -57,7 +58,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="inventory_btn" layoutX="5.0" layoutY="267.0" minHeight="40.0" minWidth="210.0" mnemonicParsing="false" onAction="#switchForm" styleClass="nav_btn" stylesheets="@mainInterfaceDesign.css" text="Inventory" textFill="WHITE">
+                              <Button fx:id="inventory_btn" disable="true" layoutX="5.0" layoutY="267.0" minHeight="40.0" minWidth="210.0" mnemonicParsing="false" onAction="#switchForm" styleClass="nav_btn" stylesheets="@mainInterfaceDesign.css" text="Inventory" textFill="WHITE">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
@@ -82,11 +83,13 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="employee_btn" layoutX="5.0" layoutY="433.0" minHeight="40.0" minWidth="210.0" mnemonicParsing="false" onAction="#switchForm" styleClass="nav_btn" stylesheets="@mainInterfaceDesign.css" text="Employee">
+                              <Button fx:id="employee_btn" disable="true" layoutX="5.0" layoutY="433.0" minHeight="40.0" minWidth="210.0" mnemonicParsing="false" onAction="#switchForm" styleClass="nav_btn" stylesheets="@mainInterfaceDesign.css" text="Employee">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Button>
+                              <FontAwesomeIcon fx:id="lockInventoryIcon" fill="#ffffffaf" glyphName="LOCK" layoutX="182.0" layoutY="295.0" size="2em" />
+                              <FontAwesomeIcon fx:id="lockEmployeeIcon" fill="#ffffffaf" glyphName="LOCK" layoutX="182.0" layoutY="461.0" size="2em" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -125,17 +128,21 @@
                                                 </AnchorPane>
                                                 <AnchorPane layoutX="284.0" layoutY="4.0" prefHeight="155.0" prefWidth="263.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css">
                                                    <children>
-                                                      <FontAwesomeIcon fill="WHITE" glyphName="DOLLAR" layoutX="26.0" layoutY="98.0" size="5em" />
                                                       <Label layoutX="125.0" layoutY="114.0" text="Today Income" textFill="WHITE">
                                                          <font>
                                                             <Font size="18.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="dashboard_TI" layoutX="216.0" layoutY="17.0" text="\$0" textFill="WHITE" AnchorPane.rightAnchor="23.0">
+                                                      <Label fx:id="dashboard_TI" layoutX="216.0" layoutY="17.0" text="0đ" textFill="WHITE" AnchorPane.rightAnchor="23.0">
                                                          <font>
                                                             <Font size="20.0" />
                                                          </font>
                                                       </Label>
+                                                      <ImageView fitHeight="123.0" fitWidth="143.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/Dong.png" />
+                                                         </image>
+                                                      </ImageView>
                                                    </children>
                                                 </AnchorPane>
                                                 <AnchorPane layoutX="839.0" layoutY="5.0" prefHeight="155.0" prefWidth="263.0" styleClass="nav_form" stylesheets="@mainInterfaceDesign.css">
@@ -160,7 +167,7 @@
                                                             <Font size="18.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="dashboard_TotalI" layoutX="227.0" layoutY="14.0" text="\$0" textFill="WHITE" AnchorPane.rightAnchor="23.0">
+                                                      <Label fx:id="dashboard_TotalI" layoutX="227.0" layoutY="14.0" text="0đ" textFill="WHITE" AnchorPane.rightAnchor="23.0">
                                                          <font>
                                                             <Font size="20.0" />
                                                          </font>
@@ -317,7 +324,225 @@
                         </AnchorPane>
                         <AnchorPane fx:id="menu_form" layoutX="240.0" layoutY="165.0" prefHeight="600.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane layoutX="14.4" layoutY="15.2" prefHeight="570.0" prefWidth="518.0" stylesheets="@mainInterfaceDesign.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="348.0" AnchorPane.topAnchor="15.0">
+                              <AnchorPane layoutX="22.0" layoutY="18.0" prefHeight="77.0" prefWidth="517.0" stylesheets="@mainInterfaceDesign.css" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="348.0" AnchorPane.topAnchor="15.0">
+                                 <styleClass>
+                                    <String fx:value="shadow" />
+                                    <String fx:value="radius" />
+                                    <String fx:value="white-bg" />
+                                 </styleClass>
+                                 <children>
+                                    <ScrollPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="56.0" prefWidth="1335.0">
+                                             <children>
+                                                <Button contentDisplay="RIGHT" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuAllBtn" prefHeight="46.0" prefWidth="74.0" stylesheets="@mainInterfaceDesign.css" text="All" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/select-all.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="90.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuFastfoodBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Fast Food">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/burger.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="215.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuBeverageBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Beverage">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/drinks.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="340.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuVegetableBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Vegetable">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/vegetable.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="465.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuSpicesBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Spices">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/spices.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="590.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuFrozenFoodBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Frozen">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/frozen.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="715.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuDryFoodBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Dry Food">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/rice.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="840.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuHouseholdGoodsBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Household Goods" wrapText="true">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/electric-appliance.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="13.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="965.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuCosmeticsBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Cosmetics">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/cosmetics.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="1090.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuPersonalCareBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Personal Care" wrapText="true">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/cream.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="13.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button contentDisplay="RIGHT" layoutX="1215.0" layoutY="5.0" mnemonicParsing="false" onAction="#MenuCannedFoodBtn" prefHeight="46.0" prefWidth="115.0" stylesheets="@mainInterfaceDesign.css" text="Canned Food" wrapText="true">
+                                                   <styleClass>
+                                                      <String fx:value="radius" />
+                                                      <String fx:value="menu-btn" />
+                                                      <String fx:value="white-bg" />
+                                                      <String fx:value="shadow" />
+                                                   </styleClass>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../Utils/Image/canned-food.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font size="13.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </ScrollPane>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane layoutX="14.4" layoutY="99.0" prefHeight="486.0" prefWidth="518.0" stylesheets="@mainInterfaceDesign.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="348.0" AnchorPane.topAnchor="99.0">
                                  <styleClass>
                                     <String fx:value="white-bg" />
                                     <String fx:value="shadow" />
