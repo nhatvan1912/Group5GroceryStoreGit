@@ -62,7 +62,7 @@ public class cardProductController implements Initializable {
         prod_name.setText(prodData.getProductName());
         prod_price.setText(String.valueOf(prodData.getPrice()) + " VNĐ");
         String path = "File:" + prodData.getImage();
-        image = new Image(path, 190, 105, false, true);
+        image = new Image(path, 190, 105, true, true);
         prod_imagineView.setImage(image);
         pr = prodData.getPrice();
     }
@@ -73,6 +73,7 @@ public class cardProductController implements Initializable {
     {
         spin = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0);
         prod_spinner.setValueFactory(spin);
+        prod_spinner.setEditable(true);
     }
 
     private int totalP;
@@ -171,16 +172,30 @@ public class cardProductController implements Initializable {
                         int upStock = checkStck - qty;
 
                         prod_image = prod_image.replace("\\", "\\\\");
-
-                        String updateStock = "UPDATE product SET prod_name = '"
-                                + prod_name.getText() + "', type = '"
-                                + type + "', stock = "
-                                + upStock + ", price = "
-                                + pr + ", status = '"
-                                + check + "', image = '"
-                                + prod_image + "', date = '"
-                                + prod_date + "' WHERE prod_id = '"
-                                + prodID + "'";
+                        String updateStock = "";
+                        if (upStock != 0) {
+                            updateStock = "UPDATE product SET prod_name = '"
+                                    + prod_name.getText() + "', type = '"
+                                    + type + "', stock = "
+                                    + upStock + ", price = "
+                                    + pr + ", status = '"
+                                    + check + "', image = '"
+                                    + prod_image + "', date = '"
+                                    + prod_date + "' WHERE prod_id = '"
+                                    + prodID + "'";
+                        }
+                        else if (upStock == 0)
+                        {
+                            updateStock = "UPDATE product SET prod_name = '"
+                                    + prod_name.getText() + "', type = '"
+                                    + type + "', stock = "
+                                    + upStock + ", price = "
+                                    + pr + ", status = 'Unavailable'"
+                                    + ", image = '"
+                                    + prod_image + "', date = '"
+                                    + prod_date + "' WHERE prod_id = '"
+                                    + prodID + "'";
+                        }
 
                         prepare = connect.prepareStatement(updateStock);
                         prepare.executeUpdate();
