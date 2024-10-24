@@ -871,13 +871,14 @@ public class MainInterfaceController implements Initializable {
     }
 
     private int getid;
+    private String getProdName;
     public void menuSelectOrder()
     {
         productData prod = menu_tableView.getSelectionModel().getSelectedItem();
         int num = menu_tableView.getSelectionModel().getSelectedIndex();
 
         if ((num -1) < -1) return;
-
+        getProdName = prod.getProductName();
         getid = prod.getId();
     }
 
@@ -892,29 +893,61 @@ public class MainInterfaceController implements Initializable {
             alert.showAndWait();
         }
         else {
-            String deleteData = "DELETE FROM customer WHERE id = '" + getid + "'";
+            String Quantity = "SELECT quantity FROM customer WHERE id = " + getid ;
             connect = Database.connectDB();
-            try{
-                alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Are you want to delete this order");
-                Optional<ButtonType> option = alert.showAndWait();
-
-                if (option.get().equals(ButtonType.OK)) {
-                    prepare = connect.prepareStatement(deleteData);
-                    prepare.executeUpdate();
-                    menuShowTotal();
-                    menuShowOrderData();
-                }
-                else{
-                    alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Cancelled");
-                    alert.showAndWait();
+            try {
+                prepare = connect.prepareStatement(Quantity);
+                result = prepare.executeQuery();
+                int getQuantity = 0;
+                if (result.next()){
+                    getQuantity = result.getInt("quantity");
                 }
 
+                System.out.println(getid);
+                String stck = "SELECT stock FROM product WHERE prod_name = '" + getProdName + "'";
+                connect = Database.connectDB();
+                try {
+                    prepare = connect.prepareStatement(stck);
+                    result = prepare.executeQuery();
+                    int stock = 0;
+                    if (result.next()) {
+                        stock = result.getInt("stock");
+                    }
+                    stock += getQuantity;
+
+                    String deleteData = "DELETE FROM customer WHERE id = '" + getid + "'";
+                    connect = Database.connectDB();
+                    try {
+                        alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Confirmation Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Are you want to delete this order");
+                        Optional<ButtonType> option = alert.showAndWait();
+
+                        if (option.get().equals(ButtonType.OK)) {
+                            prepare = connect.prepareStatement(deleteData);
+                            prepare.executeUpdate();
+                            menuShowTotal();
+                            menuShowOrderData();
+                            String updateData = "UPDATE product SET stock = " + stock + " WHERE prod_name = '" + getProdName + "'";
+                            connect = Database.connectDB();
+                            prepare = connect.prepareStatement(updateData);
+                            prepare.executeUpdate();
+                        } else {
+                            alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Warning Message");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Cancelled");
+                            alert.showAndWait();
+                            getid = 0;
+                        }
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

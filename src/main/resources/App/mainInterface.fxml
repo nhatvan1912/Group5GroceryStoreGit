@@ -399,7 +399,7 @@
                         </AnchorPane>
                         <AnchorPane fx:id="customers_form" layoutX="173.0" layoutY="167.0" prefHeight="600.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane layoutX="12.0" layoutY="12.0" prefHeight="575.0" prefWidth="855.0" stylesheets="@mainInterfaceDesign.css">
+                              <AnchorPane layoutX="12.0" layoutY="12.0" prefHeight="575.0" prefWidth="855.0" stylesheets="@mainInterfaceDesign.css" AnchorPane.bottomAnchor="12.799999999999955" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.799999999999955" AnchorPane.topAnchor="12.0">
                                  <styleClass>
                                     <String fx:value="white-bg" />
                                     <String fx:value="shadow" />
