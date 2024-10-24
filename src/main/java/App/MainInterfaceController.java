@@ -327,7 +327,7 @@ public class MainInterfaceController implements Initializable {
     }
 
     public void dashboardNSP(){
-        String sql = "SELECT COUNT(quantity) FROM customer";
+        String sql = "SELECT SUM(quantity) FROM customer";
 
         connect = Database.connectDB();
 
@@ -336,7 +336,7 @@ public class MainInterfaceController implements Initializable {
             prepare = connect.prepareStatement(sql);
             result = prepare.executeQuery();
             if(result.next()){
-                q = result.getInt("COUNT(quantity)");
+                q = result.getInt("SUM(quantity)");
 
             }
             dashboard_NSP.setText(String.valueOf(q));
@@ -1196,7 +1196,7 @@ public class MainInterfaceController implements Initializable {
         String sql = "SELECT e.*, SUM(r.total) AS total " +
                 "FROM employee e " +
                 "LEFT JOIN receipt r ON e.username = r.em_username " +
-                "GROUP BY e.username";
+                "GROUP BY e.id, e.username, e.password, e.question, e.answer, e.date, e.manager";
 
         connect = Database.connectDB();
 
