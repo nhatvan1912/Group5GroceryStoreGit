@@ -1163,7 +1163,7 @@ public class MainInterfaceController implements Initializable {
 
             try {
 
-                JasperReport jReport = JasperCompileManager.compileReport("D:\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
+                JasperReport jReport = JasperCompileManager.compileReport("E:\\PTIT\\Kì 5\\CODE\\JAVA\\Project\\Group5GroceryStoreGit\\src\\main\\resources\\App\\report.jrxml");
                 JasperPrint jPrint = JasperFillManager.fillReport(jReport, map, connect);
 
                 JasperViewer.viewReport(jPrint, false);
