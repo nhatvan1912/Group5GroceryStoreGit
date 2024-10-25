@@ -1018,7 +1018,6 @@ public class MainInterfaceController implements Initializable {
 
     }
 
-
     public void switchForm(ActionEvent event)
     {
         if (event.getSource() == dashboard_btn)
