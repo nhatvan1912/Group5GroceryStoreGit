@@ -418,8 +418,16 @@ public class MainInterfaceController implements Initializable {
             alert.setContentText("Please select product you want to update!");
             alert.showAndWait();
         }else{
+<<<<<<< Updated upstream
             String pathTemp = path;
             pathTemp = pathTemp.replace("\\", "\\\\");
+=======
+            String pathTemp;
+            if(path.contains("\\\\"))
+                pathTemp = path.replace("\\", "\\\\");
+            else
+                pathTemp = path.replace("\\", "\\\\\\\\");
+>>>>>>> Stashed changes
             String updateData = "update product set prod_id = '"
                     + inventory_productID.getText() + "', prod_name = '"
                     + inventory_productName.getText() + "', type = '"
