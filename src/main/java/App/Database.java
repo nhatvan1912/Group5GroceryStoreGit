@@ -11,7 +11,7 @@ public class Database {
     private final static String url = "jdbc:mysql://localhost:3306/listaccount";
 
     private final static String username = "root";
-    private final static String password = "";
+    private final static String password = "12345678";
     public static Connection connectDB(){
         try{
             Connection connect = DriverManager.getConnection(url, username, password);

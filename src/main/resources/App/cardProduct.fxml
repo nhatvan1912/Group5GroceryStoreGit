@@ -11,17 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<<<<<<< Updated upstream
-<AnchorPane fx:id="card_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="196.0" prefWidth="214.0" stylesheets="@cardDesign.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.cardProductController">
-=======
 <AnchorPane fx:id="card_form" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="230.0" stylesheets="@cardDesign.css" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.cardProductController">
->>>>>>> Stashed changes
     <children>
         <VBox layoutX="52.0" layoutY="-10.0" prefHeight="223.0" prefWidth="283.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="270.0">
                     <children>
-                        <Label fx:id="prod_name" prefHeight="22.0" prefWidth="98.0" text="Spaghetti">
+                        <Label fx:id="prod_name" prefHeight="22.0" prefWidth="184.0" text="Spaghetti">
                             <font>
                                 <Font size="15.0" />
                             </font>
@@ -29,7 +25,7 @@
                                 <Insets left="10.0" />
                             </HBox.margin>
                         </Label>
-                        <Label fx:id="prod_price" alignment="CENTER_RIGHT" prefHeight="22.0" prefWidth="122.0" stylesheets="@cardDesign.css" text="0 VNĐ">
+                        <Label fx:id="prod_price" alignment="CENTER_RIGHT" prefHeight="22.0" prefWidth="180.0" stylesheets="@cardDesign.css" text="0 VNĐ">
                             <padding>
                                 <Insets right="5.0" />
                             </padding>
@@ -42,9 +38,9 @@
                         </Label>
                     </children>
                 </HBox>
-                <AnchorPane prefHeight="95.0" prefWidth="194.0">
+                <AnchorPane prefHeight="154.0" prefWidth="214.0">
                     <children>
-                        <ImageView fx:id="prod_imagineView" fitHeight="94.0" fitWidth="175.0" layoutX="24.2" layoutY="4.8" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.799999999999997" AnchorPane.leftAnchor="24.2" AnchorPane.topAnchor="4.8" />
+                        <ImageView fx:id="prod_imagineView" fitHeight="128.0" fitWidth="131.0" layoutX="42.0" layoutY="10.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="9.199999999999989" AnchorPane.leftAnchor="42.0" AnchorPane.topAnchor="10.0" />
                     </children>
                 </AnchorPane>
                 <HBox alignment="CENTER" prefHeight="46.0" prefWidth="270.0">

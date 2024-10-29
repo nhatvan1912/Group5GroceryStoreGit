@@ -154,8 +154,8 @@ public class LoginController {
             alert.setContentText("Please fill all the fields");
             alert.showAndWait();
         }else {
-            String regData = "INSERT INTO employee (username, password, question, answer, date) "
-                    + "VALUES (?,?,?,?,?)";
+            String regData = "INSERT INTO employee (username, password, question, answer, date, manager) "
+                    + "VALUES (?,?,?,?,?,?)";
             connect = Database.connectDB();
 
             try {
@@ -186,9 +186,11 @@ public class LoginController {
                     prepare.setString(3, (String)su_question.getSelectionModel().getSelectedItem());
                     prepare.setString(4, su_answer.getText());
 
+
                     Date date = new Date();
                     java.sql.Date sqlDate = new java.sql.Date(date.getTime());
                     prepare.setString(5, String.valueOf(sqlDate));
+                    prepare.setString(6, String.valueOf(0));
                     prepare.executeUpdate();
 
                     alert = new Alert(Alert.AlertType.INFORMATION);

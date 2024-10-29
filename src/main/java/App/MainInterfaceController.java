@@ -46,170 +46,142 @@ import java.util.*;
 public class MainInterfaceController implements Initializable {
     @FXML
     private Button customers_btn;
-
     @FXML
     private Button dashboard_btn;
-
     @FXML
     private Button inventory_addBtn;
-
     @FXML
     private Button inventory_btn;
-
     @FXML
     private Button inventory_clearBtn;
-
     @FXML
     private TableColumn<productData, String> inventory_col_date;
-
     @FXML
     private TableColumn<productData, String> inventory_col_productID;
-
     @FXML
     private TableColumn<productData, String> inventory_col_productName;
-
     @FXML
     private TableColumn<productData, String> inventory_col_price;
-
     @FXML
     private TableColumn<productData, String> inventory_col_status;
-
     @FXML
     private TableColumn<productData, String> inventory_col_stock;
-
     @FXML
     private TableColumn<productData, String> inventory_col_type;
-
     @FXML
     private Button inventory_deleteBtn;
-
     @FXML
     private AnchorPane inventory_form;
-
     @FXML
     private ImageView inventory_imageView;
-
     @FXML
     private Button inventory_importImage;
-
     @FXML
     private TableView<productData> inventory_table;
-
     @FXML
     private Button inventory_updateBtn;
-
     @FXML
     private Button logout_btn;
-
     @FXML
     private AnchorPane mainInterface;
-
     @FXML
     private Button menu_btn;
-
     @FXML
     private Label main_username;
-
     @FXML
     private TextField inventory_price;
-
     @FXML
     private TextField inventory_productID;
-
     @FXML
     private TextField inventory_productName;
-
     @FXML
     private ComboBox<String> inventory_status;
-
     @FXML
     private TextField inventory_stock;
-
     @FXML
     private ComboBox<String> inventory_type;
-
     @FXML
     private TextField menu_amount;
-
     @FXML
     private Label menu_change;
-
     @FXML
     private TableColumn<productData, String> menu_col_price;
-
     @FXML
     private TableColumn<productData, String> menu_col_productName;
-
     @FXML
     private TableColumn<productData, Integer> menu_col_quantity;
-
     @FXML
     private AnchorPane menu_form;
-
     @FXML
     private GridPane menu_gridPane;
-
     @FXML
     private Button menu_payBtn;
-
     @FXML
     private Button menu_receiptBtn;
-
     @FXML
     private Button menu_removeBtn;
-
     @FXML
     private ScrollPane menu_scrollPane;
-
     @FXML
     private TableColumn<customerData, String> customers_col_cashier;
-
     @FXML
     private TableColumn<customerData, String> customers_col_customerID;
-
     @FXML
     private TableColumn<customerData, String> customers_col_date;
-
     @FXML
     private TableColumn<customerData, String> customers_col_total;
-
     @FXML
     private AnchorPane customers_form;
-
     @FXML
     private TableView<customerData> customers_tableView;
-
     @FXML
     private TableView<productData> menu_tableView;
-
     @FXML
     private Label menu_total;
-
     @FXML
     private Label dashboard_NC;
-
     @FXML
     private Label dashboard_NSP;
-
     @FXML
     private Label dashboard_TI;
-
     @FXML
     private Label dashboard_TotalI;
-
     @FXML
     private AnchorPane dashboard_form;
-
     @FXML
     private BarChart<?, ?> dashboard_customerChart;
-
-
     @FXML
     private AreaChart<?, ?> dashboard_incomeChart;
-
     @FXML
-    private FontAwesomeIcon inventory_lockIcon;
-
+    private Button em_btn_delete;
+    @FXML
+    private Button em_btn_open;
+    @FXML
+    private TableView<employeeData> em_tableView;
+    @FXML
+    private TableColumn<employeeData, String> col_employee_answer;
+    @FXML
+    private TableColumn<employeeData, Date> col_employee_date;
+    @FXML
+    private TableColumn<employeeData, Integer> col_employee_manager;
+    @FXML
+    private TableColumn<employeeData, String> col_employee_password;
+    @FXML
+    private TableColumn<employeeData, String> col_employee_question;
+    @FXML
+    private TableColumn<employeeData, Integer> col_employee_total;
+    @FXML
+    private TableColumn<employeeData, String> col_employee_username;
+    @FXML
+    private Button employee_btn;
+    @FXML
+    private AnchorPane employee_form;
+    @FXML
+    private FontAwesomeIcon lockEmployeeIcon;
+    @FXML
+    private FontAwesomeIcon lockInventoryIcon;
+    @FXML
+    private AnchorPane menu_displayProd;
 
     public static String username;
     public static String path = "";
@@ -227,8 +199,11 @@ public class MainInterfaceController implements Initializable {
     private System JRXmlLoader;
 
     public void dashboardDisplayNC(){
+        Date date = new Date();
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-        String sql = "SELECT COUNT(id) FROM receipt";
+        String sql = "SELECT COUNT(customer_id) FROM receipt WHERE date = '"
+                + sqlDate + "'";
         connect = Database.connectDB();
 
         try{
@@ -237,7 +212,7 @@ public class MainInterfaceController implements Initializable {
             result = prepare.executeQuery();
 
             if(result.next()){
-                nc = result.getInt("COUNT(id)");
+                nc = result.getInt("COUNT(customer_id)");
             }
             dashboard_NC.setText(String.valueOf(nc));
         }catch(Exception e){
@@ -261,7 +236,7 @@ public class MainInterfaceController implements Initializable {
             if(result.next()){
                 ti = result.getInt("SUM(total)");
             }
-            dashboard_TI.setText("$" + ti);
+            dashboard_TI.setText(ti+"đ");
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -281,7 +256,7 @@ public class MainInterfaceController implements Initializable {
             if(result.next()){
                 ti = result.getInt("SUM(total)");
             }
-            dashboard_TotalI.setText("$" + ti);
+            dashboard_TotalI.setText(ti+"đ");
 
         }catch(Exception e){
             e.printStackTrace();
@@ -289,7 +264,7 @@ public class MainInterfaceController implements Initializable {
     }
 
     public void dashboardNSP(){
-        String sql = "SELECT COUNT(quantity) FROM customer";
+        String sql = "SELECT SUM(quantity) FROM customer";
 
         connect = Database.connectDB();
 
@@ -298,7 +273,7 @@ public class MainInterfaceController implements Initializable {
             prepare = connect.prepareStatement(sql);
             result = prepare.executeQuery();
             if(result.next()){
-                q = result.getInt("COUNT(quantity)");
+                q = result.getInt("SUM(quantity)");
 
             }
             dashboard_NSP.setText(String.valueOf(q));
@@ -408,6 +383,7 @@ public class MainInterfaceController implements Initializable {
         if(inventory_productID.getText().isEmpty()
                 || inventory_productName.getText().isEmpty()
                 || inventory_price.getText().isEmpty()
+                || inventory_price.getText().isEmpty()
                 || inventory_stock.getText().isEmpty()
                 || inventory_type.getSelectionModel().getSelectedItem() == null
                 || inventory_status.getSelectionModel().getSelectedItem() == null
@@ -418,16 +394,11 @@ public class MainInterfaceController implements Initializable {
             alert.setContentText("Please select product you want to update!");
             alert.showAndWait();
         }else{
-<<<<<<< Updated upstream
-            String pathTemp = path;
-            pathTemp = pathTemp.replace("\\", "\\\\");
-=======
             String pathTemp;
             if(path.contains("\\\\"))
                 pathTemp = path.replace("\\", "\\\\");
             else
                 pathTemp = path.replace("\\", "\\\\\\\\");
->>>>>>> Stashed changes
             String updateData = "update product set prod_id = '"
                     + inventory_productID.getText() + "', prod_name = '"
                     + inventory_productName.getText() + "', type = '"
@@ -545,11 +516,10 @@ public class MainInterfaceController implements Initializable {
         inventory_price.setText(String.valueOf(prodData.getPrice()));
         inventory_type.getSelectionModel().select(prodData.getType());
         inventory_status.getSelectionModel().select(prodData.getStatus());
-        String pathTemp = prodData.getImage();
-        path = pathTemp.replace("\\\\","\\");
+        path = prodData.getImage();
         date = String.valueOf(prodData.getDate());
         id = prodData.getId();
-        image = new Image(pathTemp, 130, 140, true, true);
+        image = new Image(path, 130, 140, true, true);
         inventory_imageView.setImage(image);
     }
 
@@ -591,8 +561,8 @@ public class MainInterfaceController implements Initializable {
         inventory_table.setItems(inventoryListData);
     }
 
-    private String[] TypeList = {"Vegetable", "Beverages", "Fast food", "Seafood", "Meat",
-    "Consumer Goods", "Personal Care"};
+    private String[] TypeList = {"Vegetable", "Beverages", "Fast food", "Frozen Food", "Spices",
+    "Household Goods", "Cosmetics", "Personal Care", "Dry Food", "Canned Food"};
     public void inventoryTypeList(){
         List<String> typeList = new ArrayList<>();
         Collections.addAll(typeList, TypeList);
@@ -607,11 +577,67 @@ public class MainInterfaceController implements Initializable {
         ObservableList listData = FXCollections.observableArrayList(statusList);
         inventory_status.setItems(listData);
     }
+    public String sqlMenuChoose;
+
+    public void MenuAllBtn()
+    {
+        sqlMenuChoose = "SELECT * FROM product";
+        menuDisplayCard();
+    }
+    public void MenuFastfoodBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Fast Food'";
+        menuDisplayCard();
+    }
+    public void MenuBeverageBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Beverages'";
+        menuDisplayCard();
+    }
+    public void MenuVegetableBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Vegetable'";
+        menuDisplayCard();
+    }
+    public void MenuFrozenFoodBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Frozen Food'";
+        menuDisplayCard();
+    }
+    public void MenuSpicesBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Spices'";
+        menuDisplayCard();
+    }
+    public void MenuHouseholdGoodsBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Household Goods'";
+        menuDisplayCard();
+    }
+    public void MenuCosmeticsBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Cosmetics'";
+        menuDisplayCard();
+    }
+    public void MenuPersonalCareBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Personal Care'";
+        menuDisplayCard();
+    }
+    public void MenuDryFoodBtn()
+    {
+        sqlMenuChoose = "select * from product where type = 'Dry Food'";
+        menuDisplayCard();
+    }
+    public void MenuCannedFoodBtn() {
+        sqlMenuChoose = "select * from product where type = 'Canned Food'";
+        menuDisplayCard();
+    }
 
     public ObservableList<productData> menuGetData()
     {
 
-        String sql = "SELECT * FROM product";
+        String sql = sqlMenuChoose;
 
         ObservableList<productData> listData = FXCollections.observableArrayList();
         connect = Database.connectDB();
@@ -641,12 +667,11 @@ public class MainInterfaceController implements Initializable {
 
         return listData;
     }
-
+    public int updateGrid = 2;
     public void menuDisplayCard()
     {
         cardListData.clear();
         cardListData.addAll(menuGetData());
-
         int row = 0, column = 0;
 
         menu_gridPane.getChildren().clear();
@@ -663,7 +688,7 @@ public class MainInterfaceController implements Initializable {
                 cardC.setMainController(this);
                 cardC.setData(cardListData.get(q));
 
-                if (column == 4){
+                if (column == updateGrid){
                     column = 0;
                     row += 1;
                 }
@@ -787,7 +812,7 @@ public class MainInterfaceController implements Initializable {
             else if (!menu_amount.getText().isEmpty())
             {
                 String insertPay = "INSERT INTO receipt (customer_id, total, date, em_username)"
-                        + "VALUES( ?, ?, ?, ?)";
+                        + "VALUES(?, ?, ?, ?)";
 
                 connect = Database.connectDB();
 
@@ -824,9 +849,7 @@ public class MainInterfaceController implements Initializable {
                             alert = new Alert((AlertType.INFORMATION));
                             alert.setTitle("Information Message");
                             alert.setHeaderText(null);
-                            alert.setContentText("Pay successfully");
-                            alert.showAndWait();
-                            alert.setContentText("Remember print receipt for customer before paying others");
+                            alert.setContentText("Pay Success! Remember print receipt for customer before paying others");
                             alert.showAndWait();
                             checkPay = true;
                             checkPrintReceipt = false;
@@ -848,13 +871,14 @@ public class MainInterfaceController implements Initializable {
     }
 
     private int getid;
+    private String getProdName;
     public void menuSelectOrder()
     {
         productData prod = menu_tableView.getSelectionModel().getSelectedItem();
         int num = menu_tableView.getSelectionModel().getSelectedIndex();
 
         if ((num -1) < -1) return;
-
+        getProdName = prod.getProductName();
         getid = prod.getId();
     }
 
@@ -869,29 +893,60 @@ public class MainInterfaceController implements Initializable {
             alert.showAndWait();
         }
         else {
-            String deleteData = "DELETE FROM customer WHERE id = '" + getid + "'";
+            String Quantity = "SELECT quantity FROM customer WHERE id = " + getid ;
             connect = Database.connectDB();
-            try{
-                alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Are you want to delete this order");
-                Optional<ButtonType> option = alert.showAndWait();
-
-                if (option.get().equals(ButtonType.OK)) {
-                    prepare = connect.prepareStatement(deleteData);
-                    prepare.executeUpdate();
-                    menuShowTotal();
-                    menuShowOrderData();
-                }
-                else{
-                    alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Cancelled");
-                    alert.showAndWait();
+            try {
+                prepare = connect.prepareStatement(Quantity);
+                result = prepare.executeQuery();
+                int getQuantity = 0;
+                if (result.next()){
+                    getQuantity = result.getInt("quantity");
                 }
 
+                String stck = "SELECT stock FROM product WHERE prod_name = '" + getProdName + "'";
+                connect = Database.connectDB();
+                try {
+                    prepare = connect.prepareStatement(stck);
+                    result = prepare.executeQuery();
+                    int stock = 0;
+                    if (result.next()) {
+                        stock = result.getInt("stock");
+                    }
+                    stock += getQuantity;
+
+                    String deleteData = "DELETE FROM customer WHERE id = '" + getid + "'";
+                    connect = Database.connectDB();
+                    try {
+                        alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Confirmation Message");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Are you want to delete this order");
+                        Optional<ButtonType> option = alert.showAndWait();
+
+                        if (option.get().equals(ButtonType.OK)) {
+                            prepare = connect.prepareStatement(deleteData);
+                            prepare.executeUpdate();
+                            menuShowTotal();
+                            menuShowOrderData();
+                            String updateData = "UPDATE product SET stock = " + stock + " WHERE prod_name = '" + getProdName + "'";
+                            connect = Database.connectDB();
+                            prepare = connect.prepareStatement(updateData);
+                            prepare.executeUpdate();
+                        } else {
+                            alert = new Alert(Alert.AlertType.WARNING);
+                            alert.setTitle("Warning Message");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Cancelled");
+                            alert.showAndWait();
+                            getid = 0;
+                        }
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -922,7 +977,6 @@ public class MainInterfaceController implements Initializable {
             {
                 checkID = result.getInt("MAX(customer_id)");
             }
-
             if (cID == 0 || cID == checkID)
                 cID++;
 
@@ -956,26 +1010,28 @@ public class MainInterfaceController implements Initializable {
         String user = username;
         user = user.substring(0,1).toUpperCase() + user.substring(1);
         main_username.setText(user);
+        String sqlManager = "select manager from employee where username ='"+username+"'";
         connect = Database.connectDB();
-        String checkManager = "select manager from employee where username = '" + username + "'";
+        int isManager = 0;
         try{
-            prepare = connect.prepareStatement(checkManager);
+            prepare = connect.prepareStatement(sqlManager);
             result = prepare.executeQuery();
-            int isManager=0;
-            if(result.next())
-            {
-                isManager=result.getInt("manager");
-                if(isManager==1)
-                {
-                    inventory_lockIcon.setVisible(false);
-                    inventory_btn.setDisable(false);
-                }
-                else{
-                    inventory_lockIcon.setVisible(true);
-                    inventory_btn.setDisable(true);
-                }
+            if(result.next()){
+                isManager = result.getInt("manager");
             }
-        } catch (SQLException e){e.printStackTrace();}
+            if(isManager == 1){
+                lockEmployeeIcon.setVisible(false);
+                lockInventoryIcon.setVisible(false);
+                employee_btn.setDisable(false);
+                inventory_btn.setDisable(false);
+            }
+            else{
+                lockEmployeeIcon.setVisible(true);
+                lockInventoryIcon.setVisible(true);
+                employee_btn.setDisable(true);
+                inventory_btn.setDisable(true);
+            }
+        }catch(SQLException e){e.printStackTrace();}
     }
     public void menuRestart(){
         totalP = 0;
@@ -1066,9 +1122,267 @@ public class MainInterfaceController implements Initializable {
         customers_col_cashier.setCellValueFactory(new PropertyValueFactory<>("emUsername"));
 
         customers_tableView.setItems(customersListData);
+    }
+    private String employeeSelected = "";
+    public ObservableList<employeeData> employeeListData()
+    {
+        ObservableList<employeeData> listData = FXCollections.observableArrayList();
+        String sql = "SELECT e.*, SUM(r.total) AS total " +
+                "FROM employee e " +
+                "LEFT JOIN receipt r ON e.username = r.em_username " +
+                "GROUP BY e.id, e.username, e.password, e.question, e.answer, e.date, e.manager";
 
+        connect = Database.connectDB();
+
+        try{
+            prepare = connect.prepareStatement(sql);
+            result = prepare.executeQuery();
+            employeeData eData;
+
+            while(result.next()){
+                eData = new employeeData(result.getInt("id"), result.getString("username"),
+                        result.getString("password"), result.getString("question"),
+                        result.getString("answer"), result.getDate("date"),
+                        result.getInt("manager"), result.getInt("total"));
+                listData.add(eData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listData;
     }
 
+    private ObservableList<employeeData> employeeDataList;
+    public void employeeShowData(){
+        employeeDataList = employeeListData();
+
+        col_employee_username.setCellValueFactory(new PropertyValueFactory<>("username"));
+        col_employee_password.setCellValueFactory(new PropertyValueFactory<>("password"));
+        col_employee_question.setCellValueFactory(new PropertyValueFactory<>("question"));
+        col_employee_answer.setCellValueFactory(new PropertyValueFactory<>("answer"));
+        col_employee_date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        col_employee_manager.setCellValueFactory(new PropertyValueFactory<>("manager"));
+        col_employee_total.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+        customerHideInformation(col_employee_password);
+        customerHideInformation(col_employee_question);
+        customerHideInformation(col_employee_answer);
+
+        em_tableView.setItems(employeeDataList);
+    }
+
+    private int getEmployeeID = 0;
+    private int employeeManager = -1;
+    public void employeeSelect()
+    {
+        employeeData emp = em_tableView.getSelectionModel().getSelectedItem();
+        int num = em_tableView.getSelectionModel().getSelectedIndex();
+
+        if ((num -1) < -1) return;
+
+        employeeSelected = emp.getUsername();
+        employeeManager = emp.getManager();
+        getEmployeeID = emp.getId();
+    }
+
+    private void customerHideInformation(TableColumn<employeeData, String> col)
+    {
+        col.setCellFactory(column -> new TableCell<employeeData, String>(){
+            @Override
+            protected void updateItem(String value, boolean empty) {
+                super.updateItem(value, empty);
+
+                if (empty || value == null)
+                    setText(null);
+                else{
+                    setText("*********");
+                }
+            }
+        });
+    }
+
+    private void customerShowInformation(TableColumn<employeeData, String> tableCell)
+    {
+        tableCell.setCellFactory(column -> new TableCell<employeeData, String>(){
+            @Override
+            protected void updateItem(String value, boolean empty) {
+                super.updateItem(value, empty);
+
+                if (empty || value == null)
+                    setText(null);
+                else{
+                    employeeData selectedEmployee = em_tableView.getSelectionModel().getSelectedItem();
+                    employeeData currentEmployee = getTableView().getItems().get(getIndex());
+
+                    if (selectedEmployee != null && selectedEmployee.equals(currentEmployee))
+                        setText(value);
+                    else{
+                        setText("*********");
+                    }
+                }
+            }
+        });
+    }
+
+    public void customerOpenBtn()
+    {
+        employeeSelect();
+        if (getEmployeeID == 0)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select the employee you want to open");
+            alert.showAndWait();
+        }
+        else {
+
+            String sql = "INSERT INTO delete_log(username, delete_by, open_by, date) VALUES(?, ?, ?, ?)";
+            connect = Database.connectDB();
+
+            try{
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Message");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you want to open this employee");
+                Optional<ButtonType> option = alert.showAndWait();
+
+                if (option.get().equals(ButtonType.OK)) {
+
+                    prepare = connect.prepareStatement(sql);
+
+                    prepare.setString(1, employeeSelected);
+                    prepare.setString(2, null);
+                    prepare.setString(3, data.username);
+                    Date date = new Date();
+                    java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                    prepare.setString(4, String.valueOf(sqlDate));
+
+                    prepare.executeUpdate();
+
+                    customerShowInformation(col_employee_password);
+                    customerShowInformation(col_employee_question);
+                    customerShowInformation(col_employee_answer);
+
+                }
+                else{
+                    alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Warning Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Cancelled");
+                    alert.showAndWait();
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void customerDeleleBtn()
+    {
+        employeeSelect();
+        if (getEmployeeID == 0)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select the employee you want to open");
+            alert.showAndWait();
+        }
+        else if (em_tableView.getItems().size() == 1)
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("You don't delete because there is only one account left");
+            alert.showAndWait();
+        }
+        else if (employeeManager == 1 && !data.username.equals(employeeSelected))
+        {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("You can't delete this account");
+            alert.showAndWait();
+        }
+        else{
+            String sql = "DELETE FROM employee WHERE id = '" + getEmployeeID + "'";
+            connect = Database.connectDB();
+
+            try {
+                Optional<ButtonType> option;
+                if (data.username.equals(employeeSelected))
+                {
+                    alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("You want to delete yourself");
+                    option = alert.showAndWait();
+                }
+                else {
+                    alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Are you sure");
+                    option = alert.showAndWait();
+                }
+
+                if (option.get().equals(ButtonType.OK)) {
+                    prepare = connect.prepareStatement(sql);
+                    prepare.executeUpdate();
+                    employeeShowData();
+
+                    String insertData = "INSERT INTO delete_log(username, delete_by, open_by, date) VALUES(?, ?, ?, ?)";
+
+                    connect = Database.connectDB();
+                    try{
+                        prepare = connect.prepareStatement(insertData);
+                        prepare.setString(1, employeeSelected);
+                        prepare.setString(2, data.username);
+                        prepare.setString(3, null);
+                        Date date = new Date();
+                        java.sql.Date sqlDate = new java.sql.Date((date.getTime()));
+                        prepare.setString(4, String.valueOf(sqlDate));
+
+                        prepare.executeUpdate();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (data.username.equals(employeeSelected))
+                        logoutFromEmployee();
+                }
+                else{
+                    alert = new Alert(AlertType.WARNING);
+                    alert.setTitle("Warning Message");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Cancelled");
+                    alert.showAndWait();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void logoutFromEmployee(){
+        try{
+            alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Information Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Goodbye. Best wishes!");
+            Optional<ButtonType> result = alert.showAndWait();
+            logout_btn.getScene().getWindow().hide();
+            Parent root = FXMLLoader.load(getClass().getResource("loginGUI.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Group 5 Grocery Store");
+            stage.setMinHeight(450);
+            stage.setMaxHeight(670);
+            stage.show();
+        }catch(Exception e){e.printStackTrace();}
+    }
 
     public void switchForm(ActionEvent event)
     {
@@ -1078,6 +1392,7 @@ public class MainInterfaceController implements Initializable {
             inventory_form.setVisible(false);
             menu_form.setVisible(false);
             customers_form.setVisible(false);
+            employee_form.setVisible(false);
 
             dashboardDisplayNC();
             dashboardDisplayTI();
@@ -1093,6 +1408,7 @@ public class MainInterfaceController implements Initializable {
             inventory_form.setVisible(true);
             menu_form.setVisible(false);
             customers_form.setVisible(false);
+            employee_form.setVisible(false);
 
             inventoryTypeList();
             inventoryStatusList();
@@ -1104,7 +1420,9 @@ public class MainInterfaceController implements Initializable {
             inventory_form.setVisible(false);
             menu_form.setVisible(true);
             customers_form.setVisible(false);
+            employee_form.setVisible(false);
 
+            sqlMenuChoose = "SELECT * FROM product";
             menuDisplayCard();
             menuShowTotal();
             menuShowOrderData();
@@ -1114,15 +1432,40 @@ public class MainInterfaceController implements Initializable {
             inventory_form.setVisible(false);
             menu_form.setVisible(false);
             customers_form.setVisible(true);
+            employee_form.setVisible(false);
 
             customersShowData();
         }
+        else if (event.getSource() == employee_btn)
+        {
+            dashboard_form.setVisible(false);
+            inventory_form.setVisible(false);
+            menu_form.setVisible(false);
+            customers_form.setVisible(false);
+            employee_form.setVisible(true);
+
+            employeeShowData();
+        }
+
     }
 
+    public void changeColumnBaseScene(){
+        menu_displayProd.widthProperty().addListener((observable, oldValue, newValue) -> {
+            double width = newValue.doubleValue();
+            if (width < 600) {
+                updateGrid = 2;
+                menuDisplayCard();
+            } else {
+                updateGrid = 3;
+                menuDisplayCard();
+            }
+        });
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         displayUsername();
+        changeColumnBaseScene();
 
         dashboardDisplayNC();
         dashboardDisplayTI();
@@ -1135,10 +1478,13 @@ public class MainInterfaceController implements Initializable {
         inventoryStatusList();
         inventoryShowData();
 
+        sqlMenuChoose = "SELECT * FROM product";
         menuDisplayCard();
         menuShowTotal();
         menuShowOrderData();
 
         customersShowData();
+
+        employeeShowData();
     }
 }
